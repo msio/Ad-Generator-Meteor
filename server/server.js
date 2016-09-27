@@ -50,7 +50,7 @@ function validateJsonFromExcel(json) {
         throw new Meteor.Error('excel-data', 'There are missing data: ' + invalidCols);
     }
 
-    return biggestObj;
+    return biggestObjKeys;
 }
 
 
@@ -67,7 +67,7 @@ Meteor.methods({
                 console.log('RRRRRRReplace', err);
                 throw Meteor.Error('excel2Json', err);
             }
-            console.log(validateJsonFromExcel(output));
+            console.log('biggest',validateJsonFromExcel(output));
 
         });
 
