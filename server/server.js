@@ -1,6 +1,7 @@
 var simpleReplace = require('simple-replace');
 var excel2Json = require('node-excel-to-json');
 import {_} from 'lodash';
+import stringSearcher from 'string-search';
 
 function validateJsonFromExcel(json) {
     if (!_.isPlainObject(json) || _.isEmpty(json)) {
@@ -49,8 +50,11 @@ function validateJsonFromExcel(json) {
     if (!_.isEmpty(invalidCols)) {
         throw new Meteor.Error('excel-data', 'There are missing data: ' + invalidCols);
     }
+    //TODO add index to every property
+    array.forEach((item,idx)=>{
 
-    return biggestObjKeys;
+    });
+
 }
 
 
@@ -62,12 +66,21 @@ Meteor.methods({
         // file originally saved as public/data/taxa.csv
         var htmlFile = fs.readFileSync(template.path, 'utf8');
         //var data = fs.readFileSync(data.path, 'utf8');
+        const placeholderRegex = /(?:\$\{([^}]+)+\})+?/g;
+        let tempMatch = placeholderRegex.exec(htmlFile);
+        let matches = []
+        while (tempMatch != null) {
+            matches.push(match[1]);
+            tempMatch = placeholderRegex.exec(htmlFile);
+        }
         excel2Json(data.path, function (err, output) {
             if (err) {
                 console.log('RRRRRRReplace', err);
                 throw Meteor.Error('excel2Json', err);
             }
-            console.log('biggest',validateJsonFromExcel(output));
+            validateJsonFromExcel(output);
+
+
 
         });
 
