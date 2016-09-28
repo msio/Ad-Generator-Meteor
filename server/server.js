@@ -3,6 +3,14 @@ var excel2Json = require('node-excel-to-json');
 import {_} from 'lodash';
 import stringSearcher from 'string-search';
 
+/**
+ * validates json object that represents spreadsheet table. spreadsheet has to be complete.
+ * All columns have to be filled
+ *
+ * @param json valid json object
+ * example:
+ * {sheet: 1 [{name: test1 }, {name: test 2 }]}
+ */
 function validateJsonFromExcel(json) {
     if (!_.isPlainObject(json) || _.isEmpty(json)) {
         throw new Meteor.Error('excel-json-validation', 'output from excel2Json is invalid object');
@@ -27,7 +35,6 @@ function validateJsonFromExcel(json) {
         i++;
     });
 
-
     //valid number of rows in columns => number of properties in biggest object
     let biggestObj = {};
     array.forEach(elem => {
@@ -36,6 +43,7 @@ function validateJsonFromExcel(json) {
         biggestObj = curObjLen > biggestObjLen ? elem : biggestObj;
     });
 
+    //check if there are missing cols
     const biggestObjKeys = Object.keys(biggestObj);
     let invalidCols = [];
     array.forEach((elem, idx)=> {
@@ -50,11 +58,6 @@ function validateJsonFromExcel(json) {
     if (!_.isEmpty(invalidCols)) {
         throw new Meteor.Error('excel-data', 'There are missing data: ' + invalidCols);
     }
-    //TODO add index to every property
-    array.forEach((item,idx)=>{
-
-    });
-
 }
 
 
@@ -78,8 +81,8 @@ Meteor.methods({
                 console.log('RRRRRRReplace', err);
                 throw Meteor.Error('excel2Json', err);
             }
+            console.log(output);
             validateJsonFromExcel(output);
-
 
 
         });
