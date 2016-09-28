@@ -8,7 +8,10 @@ Template.form.helpers({
         return Templates.find();
     },
     uploadedData: function () {
-        return Data.find();
+        return Data.collection.find();
+    },
+    data: function () {
+        Data.collection.find().fetch();
     }
 });
 
@@ -51,15 +54,15 @@ Template.form.helpers({
 });
 
 Template.form.events({
-    'click .js-generate': function (e,template) {
+    'click .js-generate': function (e, template) {
         Meteor.call('replacePlaceholders', {
-            template: template.tpl.get()._id,
-            data: template.dat.get()._id
+            templateId: template.tpl.get()._id,
+            spreadsheetId: template.dat.get()._id
         }, function (err, res) {
             if (err) {
                 alert(err)
             } else {
-                console.log('result',res);
+                console.log('result', res);
             }
         });
     },
@@ -105,24 +108,25 @@ Template.form.events({
             // there was multiple files selected
             var file = e.currentTarget.files[0];
             if (file) {
-                        console.log();
-               /* excel2Json(data.path, function (err,output) {
-                    if(err){
-                        throw error;
-                    }else{
-                        console.log(output);
-                    }
-                });*/
+                console.log();
+                /* excel2Json(data.path, function (err,output) {
+                 if(err){
+                 throw error;
+                 }else{
+                 console.log(output);
+                 }
+                 });*/
 
-
+                console.log();
                 var uploadInstance = Data.insert({
                     file: file,
                     streams: 'dynamic',
                     chunkSize: 'dynamic'
                 }, false);
 
-                uploadInstance.on('start', function () {
+                uploadInstance.on('start', function (error, filesObj) {
                     // template.currentUpload.set(this);
+                    console.log(error);
                 });
 
                 uploadInstance.on('end', function (error, fileObj) {

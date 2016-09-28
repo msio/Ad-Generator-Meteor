@@ -20,13 +20,20 @@ Data = new Meteor.Files({
     storagePath: '/Users/Msio/adTemplating/data',
     allowClientCode: false, // Disallow remove files from Client
     onBeforeUpload: function (file) {
-        // Allow upload files under 10MB, and only in png/jpg/jpeg formats
-        if (file.size <= 1024 * 1024 * 10 && /xlsx|xls|xlsm/i.test(file.extension)) {
-            return true;
-        } else {
+        if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
         }
+        return true;
     }
 });
 
-Resolutions = new Mongo.Collection('resolutions');
+
+TabularTables = {};
+
+TabularTables.Data = new Tabular.Table({
+    name: "Data",
+    collection: Data.collection,
+    columns: [
+        {data: "name", title: "Name"}
+    ]
+});

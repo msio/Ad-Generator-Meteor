@@ -26,3 +26,8 @@ twbs:bootstrap
 kadira:flow-router
 kadira:blaze-layout
 aldeed:autoform
+huaming:js-xlsx
+mdg:validation-error
+aramk:collection-table
+aldeed:tabular
+session

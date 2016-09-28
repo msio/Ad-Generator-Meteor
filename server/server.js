@@ -1,70 +1,67 @@
 var simpleReplace = require('simple-replace');
 var excel2Json = require('node-excel-to-json');
 import {_} from 'lodash';
-import stringSearcher from 'string-search';
+
+const columns = ['publisher', 'camapign', 'keyword', 'keyword_no_space', 'domain', 'ad_name', 'other_Info', 'title'];
 
 /**
  * validates json object that represents spreadsheet table. spreadsheet has to be complete.
  * All columns have to be filled
  *
  * @param json valid json object
+ * @param spreadsheatId id of spreadsheet in db
  * example:
  * {sheet: 1 [{name: test1 }, {name: test 2 }]}
  */
-function validateJsonFromExcel(json) {
+function validateJsonFromExcel(json, spreadsheatId) {
     if (!_.isPlainObject(json) || _.isEmpty(json)) {
-        throw new Meteor.Error('excel-json-validation', 'output from excel2Json is invalid object');
+        throw new ValidationError([{
+            name: 'excel2json-validation',
+            sId: spreadsheatId
+        }], 'output from excel2Json is invalid object');
     }
     //check if there is more than 1 sheet in file
     const jsonObjKeys = Object.keys(json);
     if (jsonObjKeys.length > 1) {
-        throw new Meteor.Error('excel-data', 'There are more than 1 sheets in file');
+        throw new ValidationError([{
+            name: 'excel-data',
+            type: 'more-sheets',
+            sId: spreadsheatId
+        }], 'There are more than 1 sheets in file');
     }
     //check if spreadsheet is empty
     const array = json[jsonObjKeys[0]];
     if (_.isArray(array) && _.isEmpty(array)) {
-        throw new Meteor.Error('excel-data', 'spreadsheet is empty');
+        throw new ValidationError([{name: 'excel-data', type: 'empty', sId: spreadsheatId}], 'spreadsheet is empty');
     }
-    //check if any col header is not empty => property name == undefined
-    let i = 1;
-    //TODO check if header names are same
-    _.forEach(array[0], (value, key)=> {
-        if (key === 'undefined') {
-            throw new Meteor.Error('excel-data', 'column ' + i + ' has no header name');
-        }
-        i++;
-    });
-
-    //valid number of rows in columns => number of properties in biggest object
-    let biggestObj = {};
-    array.forEach(elem => {
-        const curObjLen = Object.keys(elem).length;
-        const biggestObjLen = Object.keys(biggestObj).length;
-        biggestObj = curObjLen > biggestObjLen ? elem : biggestObj;
-    });
 
     //check if there are missing cols
-    const biggestObjKeys = Object.keys(biggestObj);
-    let invalidCols = [];
+    const defeinedObjKeys = Object.keys(array[0]);
+    let colsError = [];
+    let colsErrorType;
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);
-        if (curObjKeys.length < biggestObjKeys.length) {
-            //spreadsheet begins with 1
-            idx++;
-            invalidCols.push(idx + ' - ' + _.difference(biggestObjKeys, curObjKeys));
+        //spreadsheet begins with 1
+        if (curObjKeys.length < columns.length) {
+            colsErrorType = 'missing-cols';
+        } else if (curObjKeys.length > columns.length) {
+            colsErrorType = 'invalid-cols';
+        }
+        if (curObjKeys.length != columns.length) {
+            colsError.push({cols: difference(columns, curObjKeys), rowIndex: idx++});
         }
     });
 
-    if (!_.isEmpty(invalidCols)) {
-        throw new Meteor.Error('excel-data', 'There are missing data: ' + invalidCols);
+    if (!_.isEmpty(colsError)) {
+        throw new ValidationError([{name: 'excel-data', sId: spreadsheatId, type: 'missing-columns'}])
     }
 }
 
 
 Meteor.methods({
     replacePlaceholders: function (doc) {
-        var template = Templates.collection.findOne(doc.template);
-        var data = Data.collection.findOne(doc.data);
+        const template = Templates.collection.findOne(doc.templateId);
+        const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
         // file originally saved as public/data/taxa.csv
         var htmlFile = fs.readFileSync(template.path, 'utf8');
@@ -78,13 +75,15 @@ Meteor.methods({
         }
         excel2Json(data.path, function (err, output) {
             if (err) {
-                console.log('RRRRRRReplace', err);
+                //TODO remove file
                 throw Meteor.Error('excel2Json', err);
             }
-            console.log(output);
-            validateJsonFromExcel(output);
-
-
+            try {
+                validateJsonFromExcel(output, doc.spreadsheetId);
+            } catch (e) {
+                Data.remove({_id: doc.spreadsheetId});
+                throw new Meteor.Error(e);
+            }
         });
 
         /*Images.write(simpleReplace(htmlFile, data), {
