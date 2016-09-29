@@ -1,7 +1,13 @@
 <template name="action">
-    <button type="button" class="js-select btn btn-default">{{selectState}}</button>
-    <button type="button" class="js-show btn btn-default"><a href="{{file.link}}?download=true" download="{{file.name}}" target="_parent">Download</a></button>
-    <button type="button" class="js-remove btn btn-default">
-        <span class="glyphicon glyphicon-remove"></span>
-    </button>
+    <div class="action">
+        <button type="button" class="js-select btn btn-default">{{selectState}}</button>
+        <button type="button" class="js-show btn btn-default">{{#if tableType "Data"}}
+            <a href="{{file.link}}?download=true"
+               download="{{file.name}}" target="_parent">Download</a>{{/if}}{{#if tableType "AdTemplates"}}
+            <a href="{{file.link}}" target="_blank">Show</a>{{/if}}
+        </button>
+        <button type="button" class="js-remove btn btn-default">
+            <span class="glyphicon glyphicon-remove"></span>
+        </button>
+    </div>
 </template>

@@ -4,11 +4,8 @@ import {BrowserPolicy} from 'meteor/browser-policy-common';
 require('bootstrap-fileinput-npm');
 
 Template.form.helpers({
-    uploadedTemplates: function () {
-        return Templates.find();
-    },
-    uploadedData: function () {
-        return Data.collection.find();
+    uploadedAdTemplates: function () {
+        return AdTemplates.find();
     },
     data: function () {
         Data.collection.find().fetch();
@@ -16,20 +13,19 @@ Template.form.helpers({
 });
 
 Template.form.onRendered(function () {
-   /*$('.js-data-input').fileinput({
-       showUploadedThumbs: false,
-       showPreview: false
-   });*/
+    /*$('.js-data-input').fileinput({
+     showUploadedThumbs: false,
+     showPreview: false
+     });*/
 });
 
 Template.form.onCreated(function () {
     this.currentUpload = new ReactiveVar(false);
     this.selectedTemplate = new ReactiveVar(null);
-    this.selectedData = new ReactiveVar(null);
     this.tpl = new ReactiveVar(null);
-    this.dat = new ReactiveVar(null);
+    this.dataBeforeUpload = null;
     this.autorun(()=> {
-        this.subscribe('templates.all');
+        this.subscribe('adTemplates.all');
         this.subscribe('data.all');
     })
 });
@@ -45,19 +41,9 @@ Template.form.helpers({
         }
         return false
     },
-    selectedDat: function (file) {
-        if (Template.instance().selectedData.get() === file._id) {
-            Template.instance().dat.set(file);
-            return file;
-        }
-        return null;
-    },
     tpl: function () {
         return Template.instance().tpl.get();
     },
-    dat: function () {
-        return Template.instance().dat.get();
-    }
 });
 
 Template.form.events({
@@ -83,7 +69,7 @@ Template.form.events({
             // there was multiple files selected
             var file = e.currentTarget.files[0];
             if (file) {
-                var uploadInstance = Templates.insert({
+                var uploadInstance = AdTemplates.insert({
                     file: file,
                     streams: 'dynamic',
                     chunkSize: 'dynamic'
@@ -107,38 +93,34 @@ Template.form.events({
         }
     },
 
-    'click .js-pick-data': function (e, template) {
-        template.selectedData.set($(e.target).attr('id'));
-    },
     'click .data-input .fileinput-upload-button': function () {
-      console.log('upload');
+        var uploadInstance = Data.insert({
+            file: this.dataBeforeUpload,
+            streams: 'dynamic',
+            chunkSize: 'dynamic'
+        }, false);
+
+        uploadInstance.on('start', function (error, filesObj) {
+            // template.currentUpload.set(this);
+        });
+
+        uploadInstance.on('end', function (error, fileObj) {
+            if (error) {
+                alert('Error during upload: ' + error.reason);
+            } else {
+                alert('File "' + fileObj.name + '" successfully uploaded');
+                $('.js-data-input').fileinput('reset');
+            }
+            // template.currentUpload.set(false);
+        });
+
+        uploadInstance.start();
     },
-    'change .js-data-input': function (e, template) {
+    'change .js-data-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {
             var file = e.currentTarget.files[0];
-
             if (file) {
-                var uploadInstance = Data.insert({
-                    file: file,
-                    streams: 'dynamic',
-                    chunkSize: 'dynamic'
-                }, false);
-
-                uploadInstance.on('start', function (error, filesObj) {
-                    // template.currentUpload.set(this);
-                    console.log(error);
-                });
-
-                uploadInstance.on('end', function (error, fileObj) {
-                    if (error) {
-                        alert('Error during upload: ' + error.reason);
-                    } else {
-                        alert('File "' + fileObj.name + '" successfully uploaded');
-                    }
-                    // template.currentUpload.set(false);
-                });
-
-                uploadInstance.start();
+                this.dataBeforeUpload = file;
             }
         }
     },

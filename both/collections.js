@@ -1,6 +1,6 @@
-Templates = new Meteor.Files({
+AdTemplates = new Meteor.Files({
     debug: false,
-    collectionName: 'Templates',
+    collectionName: 'AdTemplates',
     storagePath: '/Users/Msio/adTemplating/templates',
     allowClientCode: false, // Disallow remove files from Client
     onBeforeUpload: function (file) {
@@ -29,12 +29,24 @@ Data = new Meteor.Files({
 
 
 SelectedData = new Mongo.Collection(null);
+SelectedAdTemplate = new Mongo.Collection(null);
 
 TabularTables = {};
 
 TabularTables.Data = new Tabular.Table({
     name: 'Data',
     collection: Data.collection,
+    columns: [
+        {data: 'name', title: 'Name'},
+        {
+            tmpl: Meteor.isClient && Template.action
+        }
+    ]
+});
+
+TabularTables.AdTemplates = new Tabular.Table({
+    name: 'AdTemplates',
+    collection: AdTemplates.collection,
     columns: [
         {data: 'name', title: 'Name'},
         {

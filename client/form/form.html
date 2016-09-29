@@ -13,30 +13,7 @@
             </div>
         </div>
         <h4>Templates</h4>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-            </thead>
-            {{#if uploadedTemplates.count}}
-                <tbody>
-                {{#each file in uploadedTemplates.each}}
-                    <tr class="{{#if selectedTpl file}}selected{{/if}}">
-                        <td><a href="{{file.link}}" target="_blank">{{file.name}}</a></td>
-                        <td>
-                            <button type="button" class="js-pick-template btn btn-default" id="{{file._id}}">Pick
-                            </button>
-                        </td>
-                    </tr>
-                {{/each}}
-                </tbody>
-            {{else}}
-                <tbody>
-                <div>No Templates uploaded, yet</div>
-                </tbody>
-            {{/if}}
-        </table>
+        {{> tabular table=TabularTables.AdTemplates  class="table table-striped table-bordered table-condensed ad-templates-table"}}
         <div class="panel panel-default">
             <div class="panel-body">
                 <input type="file" class="js-data-input file file-loading" data-main-class="data-input"
@@ -44,7 +21,7 @@
             </div>
         </div>
         <h4>Data</h4>
-        {{> tabular table=TabularTables.Data class="table table-striped table-bordered table-condensed data-table"}}
+        {{> tabular table=TabularTables.Data  class="table table-striped table-bordered table-condensed data-table"}}
         <button type="button" class="js-generate btn btn-default">Generate</button>
     </div>
 </template>

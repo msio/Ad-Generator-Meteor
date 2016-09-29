@@ -12,9 +12,9 @@ Meteor.startup(function () {
     BrowserPolicy.content.allowFontDataUrl();
 });
 
-Templates.denyClient();
-Meteor.publish('templates.all', function () {
-    return Templates.find().cursor;
+AdTemplates.denyClient();
+Meteor.publish('adTemplates.all', function () {
+    return AdTemplates.find().cursor;
 });
 
 

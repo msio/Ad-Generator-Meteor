@@ -2,8 +2,7 @@ var simpleReplace = require('simple-replace');
 var excel2Json = require('node-excel-to-json');
 import {_} from 'lodash';
 
-const columns = ['publisher', 'camapign', 'keyword', 'keyword_no_space', 'domain', 'ad_name', 'other_Info', 'title'];
-
+const columns = ['publisher', 'campaign', 'keyword', 'keyword_no_spaces', 'domain', 'ad_name', 'other_info', 'title'];
 /**
  * validates json object that represents spreadsheet table. spreadsheet has to be complete.
  * All columns have to be filled
@@ -36,7 +35,6 @@ function validateJsonFromExcel(json, spreadsheatId) {
     }
 
     //check if there are missing cols
-    const defeinedObjKeys = Object.keys(array[0]);
     let colsError = [];
     let colsErrorType;
     array.forEach((elem, idx)=> {
@@ -44,12 +42,10 @@ function validateJsonFromExcel(json, spreadsheatId) {
         //spreadsheet begins with 1
         if (curObjKeys.length < columns.length) {
             colsErrorType = 'missing-cols';
-        } else if (curObjKeys.length > columns.length) {
+        } else if (curObjKeys.length >= columns.length) {
             colsErrorType = 'invalid-cols';
         }
-        if (curObjKeys.length != columns.length) {
-            colsError.push({cols: difference(columns, curObjKeys), rowIndex: idx++});
-        }
+        colsError.push({cols: _.difference(columns, curObjKeys), rowIndex: idx++});
     });
 
     if (!_.isEmpty(colsError)) {
@@ -60,18 +56,11 @@ function validateJsonFromExcel(json, spreadsheatId) {
 
 Meteor.methods({
     replacePlaceholders: function (doc) {
-        const template = Templates.collection.findOne(doc.templateId);
+        const template = AdTemplates.collection.findOne(doc.templateId);
         const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
         var htmlFile = fs.readFileSync(template.path, 'utf8');
 
-        /*
-         let tempMatch = regex.exec(htmlFile);
-         let matches = []
-         while (tempMatch != null) {
-         matches.push(tempMatch[1]);
-         tempMatch = regex.exec(htmlFile);
-         }*/
         let output;
         const excel2JsonSync = Meteor.wrapAsync(excel2Json);
         try {
@@ -96,11 +85,11 @@ Meteor.methods({
                 htmlFile = htmlFile.replace(new RegExp(match, 'g'), array[num][headerName]);
             } else {
                 // console.log(match, array[0][match.substring(1, match.length - 1)]);
-                 htmlFile = htmlFile.replace(match, array[0][match.substring(1, match.length - 1)]);
+                htmlFile = htmlFile.replace(match, array[0][match.substring(1, match.length - 1)]);
             }
         });
 
-        // console.log(htmlFile);
+        console.log(htmlFile);
 
         /**
          *
@@ -118,17 +107,6 @@ Meteor.methods({
          *
          */
 
-
-        /*Images.write(simpleReplace(htmlFile, data), {
-         fileName: 'replaced.html',
-         type: 'text/html'
-         }, function (error, fileRef) {
-         if (error) {
-         throw error;
-         } else {
-         return fileRef
-         }
-         })*/
     }
 });
  
