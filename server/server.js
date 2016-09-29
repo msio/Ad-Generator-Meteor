@@ -63,7 +63,6 @@ Meteor.methods({
         const template = Templates.collection.findOne(doc.templateId);
         const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
-        // file originally saved as public/data/taxa.csv
         var htmlFile = fs.readFileSync(template.path, 'utf8');
 
         /*
@@ -86,12 +85,22 @@ Meteor.methods({
         const array = output[Object.keys(output)[0]];
         const regex = /{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g
         const matches = htmlFile.match(regex);
+        // console.log(matches);
         matches.forEach(match => {
-            const matchNum = match.search(/(\d+)/i);
-            if (matchNum >= 0) {
-                htmlFile.replace(match, array[matchNum][])
+            const matchedPos = match.search(/(\d+)/i);
+            if (matchedPos >= 0) {
+                const headerName = match.substring(1, matchedPos);
+                const num = match.split('')[matchedPos];
+                // console.log(match, array[num][headerName]);
+                // console.log(match,match.length);
+                htmlFile = htmlFile.replace(new RegExp(match, 'g'), array[num][headerName]);
+            } else {
+                // console.log(match, array[0][match.substring(1, match.length - 1)]);
+                 htmlFile = htmlFile.replace(match, array[0][match.substring(1, match.length - 1)]);
             }
         });
+
+        // console.log(htmlFile);
 
         /**
          *
