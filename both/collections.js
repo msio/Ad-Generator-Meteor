@@ -18,7 +18,7 @@ Data = new Meteor.Files({
     debug: false,
     collectionName: 'Data',
     storagePath: '/Users/Msio/adTemplating/data',
-    allowClientCode: false, // Disallow remove files from Client
+    allowClientCode: true,
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
@@ -28,12 +28,17 @@ Data = new Meteor.Files({
 });
 
 
+SelectedData = new Mongo.Collection(null);
+
 TabularTables = {};
 
 TabularTables.Data = new Tabular.Table({
-    name: "Data",
+    name: 'Data',
     collection: Data.collection,
     columns: [
-        {data: "name", title: "Name"}
+        {data: 'name', title: 'Name'},
+        {
+            tmpl: Meteor.isClient && Template.action
+        }
     ]
 });

@@ -5,6 +5,8 @@
     "start": "meteor run"
   },
   "dependencies": {
+    "bootstrap-fileinput-npm": "^4.2.8",
+    "bootstrap-sass": "^3.3.7",
     "lodash": "^4.16.2",
     "meteor-node-stubs": "~0.2.0",
     "node-excel-to-json": "0.0.3",

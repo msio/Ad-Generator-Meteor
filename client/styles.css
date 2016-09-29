@@ -1,3 +1,11 @@
-.selected{
+.selected {
     background-color: #b76400 !important;
+}
+
+.data-table tbody tr[chosen=true] {
+    background-color: #337ab7;
+}
+
+.data-table tbody tr[chosen=true] td{
+    color: #FFFFFF;
 }

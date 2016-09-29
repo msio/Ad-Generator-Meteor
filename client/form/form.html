@@ -39,79 +39,12 @@
         </table>
         <div class="panel panel-default">
             <div class="panel-body">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label>New Data</label>
-                        <div class="input-group">
-                            <input type="file" class="js-data-input form-control" placeholder="Data Name">
-                        </div>
-                    </div>
-                </form>
+                <input type="file" class="js-data-input file file-loading" data-main-class="data-input"
+                       data-allowed-file-extensions='["xlsx","xls","xlsm"]'>
             </div>
         </div>
         <h4>Data</h4>
-        {{> tabular table=TabularTables.Data class="table table-striped table-bordered table-condensed"}}
-        <!--table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Name</th>
-            </tr>
-            </thead>
-            {{#if uploadedData.count}}
-                <tbody>
-                {{#each file in uploadedData.each}}
-                    <tr class="{{#if selectedDat file}}selected{{/if}}">
-                        <td><a href="{{file.link}}?download=true" download="{{file.name}}">{{file.name}}</a></td>
-                        <td>
-                            <button type="button" class="js-pick-data btn btn-default" id="{{file._id}}">Pick
-                            </button>
-                        </td>
-                    </tr>
-                {{/each}}
-                </tbody>
-            {{else}}
-                <tbody>
-                <div>No Data uploaded, yet</div>
-                </tbody>
-            {{/if}}
-        </table>-->
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">Selected Template</label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control disabled" value="{{tpl.name}}" placeholder="Template"
-                                   readonly>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPassword3" class="col-md-2 control-label">Selected Data</label>
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="inputPassword3" value="{{dat.name}}"
-                                   placeholder="Data" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                Resolutions <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">300x250</a></li>
-                                <li><a href="#">600x200</a></li>
-                                <li><a href="#">500x500</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="button" class="js-generate btn btn-default">Generate</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        {{> tabular table=TabularTables.Data class="table table-striped table-bordered table-condensed data-table"}}
+        <button type="button" class="js-generate btn btn-default">Generate</button>
     </div>
 </template>

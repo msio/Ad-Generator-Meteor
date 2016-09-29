@@ -65,26 +65,50 @@ Meteor.methods({
         var fs = Npm.require('fs');
         // file originally saved as public/data/taxa.csv
         var htmlFile = fs.readFileSync(template.path, 'utf8');
-        //var data = fs.readFileSync(data.path, 'utf8');
-        const placeholderRegex = /(?:\$\{([^}]+)+\})+?/g;
-        let tempMatch = placeholderRegex.exec(htmlFile);
-        let matches = []
-        while (tempMatch != null) {
-            matches.push(match[1]);
-            tempMatch = placeholderRegex.exec(htmlFile);
+
+        /*
+         let tempMatch = regex.exec(htmlFile);
+         let matches = []
+         while (tempMatch != null) {
+         matches.push(tempMatch[1]);
+         tempMatch = regex.exec(htmlFile);
+         }*/
+        let output;
+        const excel2JsonSync = Meteor.wrapAsync(excel2Json);
+        try {
+            output = excel2JsonSync(data.path);
+            validateJsonFromExcel(output, doc.spreadsheetId);
+        } catch (e) {
+            Data.remove({_id: doc.spreadsheetId});
+            throw e;
         }
-        excel2Json(data.path, function (err, output) {
-            if (err) {
-                //TODO remove file
-                throw Meteor.Error('excel2Json', err);
-            }
-            try {
-                validateJsonFromExcel(output, doc.spreadsheetId);
-            } catch (e) {
-                Data.remove({_id: doc.spreadsheetId});
-                throw new Meteor.Error(e);
+
+        const array = output[Object.keys(output)[0]];
+        const regex = /{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g
+        const matches = htmlFile.match(regex);
+        matches.forEach(match => {
+            const matchNum = match.search(/(\d+)/i);
+            if (matchNum >= 0) {
+                htmlFile.replace(match, array[matchNum][])
             }
         });
+
+        /**
+         *
+         * if(publisher == global){
+         *     if(publisher is without number){
+         *         take value from object a replace
+         *     }
+         *
+         * }
+         * ....
+         *
+         *
+         *
+         *
+         *
+         */
+
 
         /*Images.write(simpleReplace(htmlFile, data), {
          fileName: 'replaced.html',
