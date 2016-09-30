@@ -2,9 +2,8 @@ AdTemplates = new Meteor.Files({
     debug: false,
     collectionName: 'AdTemplates',
     storagePath: '/Users/Msio/adTemplating/templates',
-    allowClientCode: false, // Disallow remove files from Client
+    allowClientCode: true,
     onBeforeUpload: function (file) {
-        // Allow upload files under 10MB, and only in png/jpg/jpeg formats
         if (file.size <= 1024 * 1024 * 10 && /html/i.test(file.extension)) {
             return true;
         } else {

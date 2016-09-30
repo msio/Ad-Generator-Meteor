@@ -29,7 +29,7 @@ Template.form.onCreated(function () {
 Template.form.events({
     'click .js-generate': function (e, template) {
         Meteor.call('replacePlaceholders', {
-            //single selection mode therefore there is only one element in the local collection
+            //single selection mode therefore there is only one ad template id in the local collection
             adTemplateId: SelectedAdTemplate.find().fetch()[0].adTemplateId,
             spreadsheetId: SelectedData.find().fetch()[0].dataId
         }, function (err, res) {
@@ -58,6 +58,7 @@ Template.form.events({
             } else {
                 alert('File "' + fileObj.name + '" successfully uploaded');
                 $('.js-ad-template-input').fileinput('reset');
+                SelectedAdTemplate.remove({});
             }
             // template.currentUpload.set(false);
         });
@@ -90,6 +91,7 @@ Template.form.events({
             } else {
                 alert('File "' + fileObj.name + '" successfully uploaded');
                 $('.js-data-input').fileinput('reset');
+                SelectedData.remove({});
             }
             // template.currentUpload.set(false);
         });

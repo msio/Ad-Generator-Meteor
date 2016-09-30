@@ -35,28 +35,31 @@ function validateJsonFromExcel(json, spreadsheatId) {
     }
 
     //check if there are missing cols
-    let colsError = [];
-    let colsErrorType;
+    let diffRows = [];
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);
-        //spreadsheet begins with 1
-        if (curObjKeys.length < columns.length) {
-            colsErrorType = 'missing-cols';
-        } else if (curObjKeys.length >= columns.length) {
-            colsErrorType = 'invalid-cols';
+        const missingRows = _.difference(columns, curObjKeys);
+        const invalidRows = _.difference(curObjKeys, columns);
+        if (missingRows.length > 0) {
+            diffRows.push({diffRows: missingRows, type: 'missing-rows', rowIndex: idx + 1});
         }
-        colsError.push({cols: _.difference(columns, curObjKeys), rowIndex: idx++});
+        if (invalidRows.length > 0) {
+            diffRows.push({diffRows: invalidRows, type: 'invalid-rows'});
+        }
     });
-
-    if (!_.isEmpty(colsError)) {
-        throw new ValidationError([{name: 'excel-data', sId: spreadsheatId, type: 'missing-columns'}])
+    //TODO if invalid or missing rows === number of rows in spreadsheet, reduce tp one element with name with missing or invalid column
+    console.log(diffRows);
+    if (!_.isEmpty(diffRows)) {
+        throw new ValidationError([{name: 'excel-data', sId: spreadsheatId, type: 'cols-error', colsError: diffRows}])
     }
 }
 
 
 Meteor.methods({
     replacePlaceholders: function (doc) {
-        const template = AdTemplates.collection.findOne(doc.templateId);
+        //TODO check if template file was found if not tell user
+        const template = AdTemplates.collection.findOne(doc.adTemplateId);
+        //TODO check if excel file was found if not tell user
         const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
         var htmlFile = fs.readFileSync(template.path, 'utf8');
@@ -67,7 +70,7 @@ Meteor.methods({
             output = excel2JsonSync(data.path);
             validateJsonFromExcel(output, doc.spreadsheetId);
         } catch (e) {
-            Data.remove({_id: doc.spreadsheetId});
+            //Data.remove({_id: doc.spreadsheetId});
             throw e;
         }
 
