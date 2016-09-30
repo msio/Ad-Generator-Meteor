@@ -50,7 +50,7 @@ TabularTables.AdTemplates = new Tabular.Table({
     columns: [
         {data: 'name', title: 'Name'},
         {
-            tmpl: Meteor.isClient && Template.action
+            tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action
         }
     ]
 });

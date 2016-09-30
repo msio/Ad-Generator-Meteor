@@ -4,12 +4,9 @@ import {BrowserPolicy} from 'meteor/browser-policy-common';
 require('bootstrap-fileinput-npm');
 
 Template.form.helpers({
-    uploadedAdTemplates: function () {
-        return AdTemplates.find();
-    },
-    data: function () {
-        Data.collection.find().fetch();
-    }
+    /*currentUpload: function () {
+     return Template.instance().currentUpload.get();
+     }*/
 });
 
 Template.form.onRendered(function () {
@@ -21,35 +18,19 @@ Template.form.onRendered(function () {
 
 Template.form.onCreated(function () {
     this.currentUpload = new ReactiveVar(false);
-    this.selectedTemplate = new ReactiveVar(null);
-    this.tpl = new ReactiveVar(null);
     this.dataBeforeUpload = null;
+    this.adTemplateBeforeUpload = null;
     this.autorun(()=> {
         this.subscribe('adTemplates.all');
         this.subscribe('data.all');
     })
 });
 
-Template.form.helpers({
-    currentUpload: function () {
-        return Template.instance().currentUpload.get();
-    },
-    selectedTpl: function (file) {
-        if (Template.instance().selectedTemplate.get() === file._id) {
-            Template.instance().tpl.set(file);
-            return true;
-        }
-        return false
-    },
-    tpl: function () {
-        return Template.instance().tpl.get();
-    },
-});
-
 Template.form.events({
     'click .js-generate': function (e, template) {
         Meteor.call('replacePlaceholders', {
-            templateId: template.tpl.get()._id,
+            //single selection mode therefore there is only one element in the local collection
+            adTemplateId: SelectedAdTemplate.find().fetch()[0].adTemplateId,
             spreadsheetId: SelectedData.find().fetch()[0].dataId
         }, function (err, res) {
             if (err) {
@@ -60,35 +41,34 @@ Template.form.events({
             }
         });
     },
-    'click .js-pick-template': function (e, template) {
-        template.selectedTemplate.set($(e.target).attr('id'));
+    'click .ad-template-input .fileinput-upload-button': function () {
+        var uploadInstance = AdTemplates.insert({
+            file: this.adTemplateBeforeUpload,
+            streams: 'dynamic',
+            chunkSize: 'dynamic'
+        }, false);
+
+        uploadInstance.on('start', function () {
+            // template.currentUpload.set(this);
+        });
+
+        uploadInstance.on('end', function (error, fileObj) {
+            if (error) {
+                alert('Error during upload: ' + error.reason);
+            } else {
+                alert('File "' + fileObj.name + '" successfully uploaded');
+                $('.js-ad-template-input').fileinput('reset');
+            }
+            // template.currentUpload.set(false);
+        });
+
+        uploadInstance.start();
     },
-    'change .js-template-input': function (e, template) {
+    'change .js-ad-template-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {
-            // We upload only one file, in case
-            // there was multiple files selected
             var file = e.currentTarget.files[0];
             if (file) {
-                var uploadInstance = AdTemplates.insert({
-                    file: file,
-                    streams: 'dynamic',
-                    chunkSize: 'dynamic'
-                }, false);
-
-                uploadInstance.on('start', function () {
-                    template.currentUpload.set(this);
-                });
-
-                uploadInstance.on('end', function (error, fileObj) {
-                    if (error) {
-                        alert('Error during upload: ' + error.reason);
-                    } else {
-                        alert('File "' + fileObj.name + '" successfully uploaded');
-                    }
-                    template.currentUpload.set(false);
-                });
-
-                uploadInstance.start();
+                this.adTemplateBeforeUpload = file;
             }
         }
     },
