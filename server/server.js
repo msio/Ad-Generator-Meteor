@@ -47,7 +47,7 @@ function validateJsonFromExcel(json, spreadsheatId) {
             diffRows.push({diffRows: invalidRows, type: 'invalid-rows'});
         }
     });
-    //TODO if invalid or missing rows === number of rows in spreadsheet, reduce tp one element with name with missing or invalid column
+    //TODO if invalid or missing rows === number of rows in spreadsheet, reduce to one element with name with missing or invalid column
     console.log(diffRows);
     if (!_.isEmpty(diffRows)) {
         throw new ValidationError([{name: 'excel-data', sId: spreadsheatId, type: 'cols-error', colsError: diffRows}])
