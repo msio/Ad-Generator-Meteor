@@ -2,6 +2,8 @@ import {Template} from 'meteor/templating';
 import {ReactiveVar} from 'meteor/reactive-var';
 import {BrowserPolicy} from 'meteor/browser-policy-common';
 require('bootstrap-fileinput-npm');
+import {columns} from '../../both/columns.js';
+import {validateJsonFromExcel} from '../../both/validations.js';
 
 Template.form.helpers({
     /*currentUpload: function () {
@@ -34,8 +36,11 @@ Template.form.events({
             spreadsheetId: SelectedData.find().fetch()[0].dataId
         }, function (err, res) {
             if (err) {
-                console.log(err);
-                alert(err)
+                if (err.details[0].name === 'excel-data') {
+                    Modal.show('Error_spreadsheet_modal', {error: err.details[0], definedCols: columns});
+                } else {
+                    alert('try again')
+                }
             } else {
                 console.log('result', res);
             }
@@ -81,22 +86,34 @@ Template.form.events({
             chunkSize: 'dynamic'
         }, false);
 
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var data = e.target.result;
+            var workbook = XLSX.read(data, {type: 'binary'});
+            var first_sheet_name = workbook.SheetNames[0];
+
+            /* Get worksheet */
+            var worksheet = workbook.Sheets[first_sheet_name];
+            const json = XLSX.utils.sheet_to_json(worksheet);
+            console.log(validateJsonFromExcel(json));
+
+        };
+        reader.readAsBinaryString(this.dataBeforeUpload);
+
+
         uploadInstance.on('start', function (error, filesObj) {
             // template.currentUpload.set(this);
         });
 
         uploadInstance.on('end', function (error, fileObj) {
             if (error) {
-                alert('Error during upload: ' + error.reason);
+                alert('error')
             } else {
-                alert('File "' + fileObj.name + '" successfully uploaded');
-                $('.js-data-input').fileinput('reset');
                 SelectedData.remove({});
+                $('.js-data-input').fileinput('reset');
             }
             // template.currentUpload.set(false);
         });
-
-        uploadInstance.start();
     },
     'change .js-data-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {

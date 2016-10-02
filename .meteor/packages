@@ -22,7 +22,6 @@ ostrio:templatehelpers
 shell-server
 browser-policy
 browser-policy-common
-twbs:bootstrap
 kadira:flow-router
 kadira:blaze-layout
 aldeed:autoform
@@ -34,3 +33,5 @@ session
 ostrio:autoform-files
 aldeed:collection2
 fourseven:scss
+peppelg:bootstrap-3-modal
+huttonr:bootstrap3
