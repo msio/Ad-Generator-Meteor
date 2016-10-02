@@ -34,21 +34,45 @@ function validateJsonFromExcel(json, spreadsheatId) {
         throw new ValidationError([{name: 'excel-data', type: 'empty', sId: spreadsheatId}], 'spreadsheet is empty');
     }
 
-    //check if there are missing cols
-    let diffRows = [];
+    //check if there are missing or invalid rows
+    let missingRows = [];
+    let invalidRows = [];
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);
-        const missingRows = _.difference(columns, curObjKeys);
-        const invalidRows = _.difference(curObjKeys, columns);
-        if (missingRows.length > 0) {
-            diffRows.push({diffRows: missingRows, type: 'missing-rows', rowIndex: idx + 1});
+        const diffMissingRows = _.difference(columns, curObjKeys);
+        const diffInvalidRows = _.difference(curObjKeys, columns);
+        if (diffMissingRows.length > 0) {
+            //spreadsheet begins with 1 and array begins with 0
+            diffMissingRows.forEach(row => {
+                missingRows.push({colName: row, rowIndex: idx + 1});
+                const found = _.findLast(missingRows, ['colName', row]);
+                if (found && found.rowIndex === array.length) {
+                    _.remove(missingRows, ['colName', row]);
+                    found.rowIndex = -1;
+                    missingRows.push(found);
+                }
+            });
         }
-        if (invalidRows.length > 0) {
-            diffRows.push({diffRows: invalidRows, type: 'invalid-rows'});
+
+        if (diffInvalidRows.length > 0) {
+            diffInvalidRows.forEach(row => {
+                const found = _.find(invalidRows, ['colName', row]);
+                if (!found) {
+                    invalidRows.push({colName: row});
+                }
+            });
         }
+
     });
-    //TODO if invalid or missing rows === number of rows in spreadsheet, reduce to one element with name with missing or invalid column
-    console.log(diffRows);
+    let errorCols = [];
+
+
+    //TODO if invalid or missing rows === number of rows in spreadsheet, reduce to one element with name with missing
+    // or invalid column
+    // console.log(missingRows);
+    console.log(invalidRows);
+
+
     if (!_.isEmpty(diffRows)) {
         throw new ValidationError([{name: 'excel-data', sId: spreadsheatId, type: 'cols-error', colsError: diffRows}])
     }
