@@ -8,7 +8,7 @@
     "bootstrap-fileinput-npm": "^4.2.8",
     "bootstrap-sass": "^3.3.7",
     "lodash": "^4.16.2",
-    "meteor-node-stubs": "~0.2.0",
+    "meteor-node-stubs": "^0.2.3",
     "node-excel-to-json": "0.0.3",
     "simple-replace": "0.0.2",
     "string-search": "^1.2.0",

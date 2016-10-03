@@ -2,31 +2,35 @@
     <div class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="warning-background modal-header">
                     <h4 class="modal-title">Invalid or Missing Excel Data</h4>
                 </div>
                 <div class="modal-body">
-                    <h3>Excel file: </h3>
-                    <h4>Your defined Columns</h4>
+                    <p><strong>Excel file:</strong> {{fileName}}</p>
+                    {{#if equals error.type 'cols-error'}}
+                        <h4>Missing Cells and Columns</h4>
+                        {{#each error.cols.missingRows}}
+                            {{#if rowIndex}}
+                                <strong>Cells:</strong>
+                                <p><strong>{{rowIndex}}</strong> - {{colName}}</p>
+                            {{else}}
+                                <strong>Columns:</strong>
+                                | {{colName}}
+                            {{/if}}
+                        {{/each}}
+                        <h4>Invalid Columns</h4>
+                        {{#each error.cols.invalidCols}}
+                            | {{colName}}
+                        {{/each}}
+                    {{else}}
+                        <p>{{error.msg}}</p>
+                    {{/if}}
+                    <h4>Defined Columns</h4>
                     <p>
                         {{#each definedCols}}
                             | {{this}}
                         {{/each}}
                     </p>
-                    <h4>Missing Cells and Columns</h4>
-                    {{#each error.cols.missingRows}}
-                        {{#if rowIndex}}
-                            <p>Cell:</p>
-                            <p><strong>{{rowIndex}}</strong> - {{colName}}</p>
-                        {{else}}
-                            <p>Columns:</p>
-                            | {{colName}}
-                        {{/if}}
-                    {{/each}}
-                    <h4>Invalid Columns</h4>
-                    {{#each error.cols.invalidCols}}
-                        | {{colName}}
-                    {{/each}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

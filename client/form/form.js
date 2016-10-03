@@ -3,7 +3,7 @@ import {ReactiveVar} from 'meteor/reactive-var';
 import {BrowserPolicy} from 'meteor/browser-policy-common';
 require('bootstrap-fileinput-npm');
 import {columns} from '../../both/columns.js';
-import {validateJsonFromExcel} from '../../both/validations.js';
+import {validateSpreadsheet} from '../../both/validations.js';
 
 Template.form.helpers({
     /*currentUpload: function () {
@@ -36,11 +36,7 @@ Template.form.events({
             spreadsheetId: SelectedData.find().fetch()[0].dataId
         }, function (err, res) {
             if (err) {
-                if (err.details[0].name === 'excel-data') {
-                    Modal.show('Error_spreadsheet_modal', {error: err.details[0], definedCols: columns});
-                } else {
-                    alert('try again')
-                }
+
             } else {
                 console.log('result', res);
             }
@@ -61,7 +57,7 @@ Template.form.events({
             if (error) {
                 alert('Error during upload: ' + error.reason);
             } else {
-                alert('File "' + fileObj.name + '" successfully uploaded');
+                sAlert.success('Template <strong>fileObj.name</strong> has been uploaded');
                 $('.js-ad-template-input').fileinput('reset');
                 SelectedAdTemplate.remove({});
             }
@@ -80,39 +76,40 @@ Template.form.events({
     },
 
     'click .data-input .fileinput-upload-button': function () {
-        var uploadInstance = Data.insert({
+        const uploadInstance = Data.insert({
             file: this.dataBeforeUpload,
             streams: 'dynamic',
             chunkSize: 'dynamic'
         }, false);
 
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            var data = e.target.result;
-            var workbook = XLSX.read(data, {type: 'binary'});
-            var first_sheet_name = workbook.SheetNames[0];
-
-            /* Get worksheet */
-            var worksheet = workbook.Sheets[first_sheet_name];
-            const json = XLSX.utils.sheet_to_json(worksheet);
-            console.log(validateJsonFromExcel(json));
-
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const error = validateSpreadsheet(e.target.result);
+            if (error) {
+                Modal.show('Error_spreadsheet_modal', {
+                    error: error,
+                    definedCols: columns,
+                    fileName: this.dataBeforeUpload.name
+                });
+            } else {
+                uploadInstance.start();
+            }
+        };
+        reader.error = (e)=> {
+            //TODO alert
+            console.log(e);
+            // alert error
         };
         reader.readAsBinaryString(this.dataBeforeUpload);
-
-
-        uploadInstance.on('start', function (error, filesObj) {
-            // template.currentUpload.set(this);
-        });
-
-        uploadInstance.on('end', function (error, fileObj) {
+        uploadInstance.on('end', (error, fileObj) => {
             if (error) {
+                console.log(error);
                 alert('error')
             } else {
+                sAlert.success('Excel Spreadsheet <strong>fileObj.name</strong> has been uploaded');
                 SelectedData.remove({});
                 $('.js-data-input').fileinput('reset');
             }
-            // template.currentUpload.set(false);
         });
     },
     'change .js-data-input': function (e) {
@@ -122,6 +119,8 @@ Template.form.events({
                 this.dataBeforeUpload = file;
             }
         }
-    },
+    }
+    ,
 
-});
+})
+;
