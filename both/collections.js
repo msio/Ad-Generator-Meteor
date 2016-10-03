@@ -1,3 +1,10 @@
+ResultAds = new Meteor.Files({
+    debug: false,
+    collectionName: 'ResultAds',
+    storagePath: '/Users/Msio/adTemplating/results',
+    allowClientCode: false
+});
+
 AdTemplates = new Meteor.Files({
     debug: false,
     collectionName: 'AdTemplates',

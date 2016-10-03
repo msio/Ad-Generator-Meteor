@@ -12,6 +12,7 @@
     "node-excel-to-json": "0.0.3",
     "simple-replace": "0.0.2",
     "string-search": "^1.2.0",
+    "write": "^0.3.2",
     "xlsx": "^0.8.0",
     "xlsx-browserify-shim": "0.0.5"
   }

@@ -84,8 +84,8 @@ Template.form.events({
 
         const reader = new FileReader();
         reader.onload = (e) => {
-            const error = validateSpreadsheet(e.target.result);
-            if (error) {
+            const res = validateSpreadsheet(e.target.result);
+            if (res.name === 'excel-data') {
                 Modal.show('Error_spreadsheet_modal', {
                     error: error,
                     definedCols: columns,
@@ -106,7 +106,7 @@ Template.form.events({
                 console.log(error);
                 alert('error')
             } else {
-                sAlert.success('Excel Spreadsheet <strong>fileObj.name</strong> has been uploaded');
+                sAlert.success('Excel Spreadsheet <strong>' + fileObj.name + '</strong> has been uploaded');
                 SelectedData.remove({});
                 $('.js-data-input').fileinput('reset');
             }

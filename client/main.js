@@ -4,9 +4,10 @@
 
 Meteor.startup(function () {
     sAlert.config({
-        // effect: 'your-effect-name-here',
+        effect: 'stackslide',
         position: 'top-right',
-        timeout: 1000
+        timeout: 3000,
+        html: true
     });
 
 });

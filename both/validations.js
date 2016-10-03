@@ -5,8 +5,24 @@
 import {_} from 'lodash';
 import {columns} from  './columns.js';
 
-export function validateSpreadsheet(data) {
-    const workbook = XLSX.read(data, {type: 'binary'});
+export function validateTemplateFileName (fileName){
+  // const regex = '/(\d+)(\x|\X)(\d+)/';
+  // const matches = fileName.
+}
+
+export function validateTemplate(input){
+
+}
+
+export function validateSpreadsheet(input) {
+    let workbook;
+
+    if (Meteor.isServer) {
+        const XLSX = require('xlsx');
+        workbook = XLSX.readFile(input);
+    } else {
+        workbook = XLSX.read(input, {type: 'binary'});
+    }
     var sheets = workbook.SheetNames;
     if (sheets.length > 1) {
         return {
@@ -58,8 +74,7 @@ export function validateSpreadsheet(data) {
             cols: {invalidCols: invalidCols, missingRows: missingRows}
         };
     }
-
-
+    return {name: 'ok', type: 'data', data: array};
 }
 
 /**
