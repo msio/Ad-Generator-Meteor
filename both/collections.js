@@ -1,3 +1,16 @@
+if (Meteor.isServer) {
+import
+    Future
+    from
+    'fibers/future';
+import
+    {
+        columns
+    }
+    from
+    './columns.js';
+}
+
 ResultAds = new Meteor.Files({
     debug: false,
     collectionName: 'ResultAds',
@@ -11,11 +24,46 @@ AdTemplates = new Meteor.Files({
     storagePath: '/Users/Msio/adTemplating/templates',
     allowClientCode: true,
     onBeforeUpload: function (file) {
-        if (file.size <= 1024 * 1024 * 10 && /html/i.test(file.extension)) {
-            return true;
-        } else {
+        if (file.size > 1024 * 1024 * 10 || !/html/i.test(file.extension)) {
             return 'Please upload html, with size equal or less than 10MB';
         }
+        const regex = /(\d+)(\x|\X)(\d+)/g;
+        const matches = file.name.match(regex);
+        if (matches.length === 0) {
+            return 'no-size-available'
+        }
+        if (matches.length > 1) {
+            return 'no-unique-size'
+        }
+        return true;
+
+    },
+    onAfterUpload: function (fileRef) {
+        //for async only
+        // const myFuture = new Future();
+        const fs = Npm.require('fs');
+        const tpl = fs.readFileSync(fileRef.path, 'utf8');
+        let errorCols = [];
+        columns.forEach(col => {
+            let regex;
+            if (col.global) {
+                regex = new RegExp('{' + col.name + '}', 'g');
+            } else {
+                regex = new RegExp('{' + col.name + '\\d}', 'g');
+            }
+            const matches = tpl.match(regex);
+            if (matches == null) {
+                errorCols.push(col);
+            }
+        });
+        if (errorCols.length !== 0) {
+            fileRef.error = {
+                name: 'placeholders-validation',
+                type: 'missing-placeholders',
+                placeholders: errorCols
+            };
+        }
+        return fileRef;
     }
 });
 

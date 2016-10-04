@@ -6,7 +6,7 @@ import {_} from 'lodash';
 import {columns} from  './columns.js';
 
 export function validateTemplateFileName (fileName){
-  // const regex = '/(\d+)(\x|\X)(\d+)/';
+    // const regex = /(\d+)(\x|\X)(\d+)/;
   // const matches = fileName.
 }
 

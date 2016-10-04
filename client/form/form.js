@@ -52,7 +52,23 @@ Template.form.events({
         uploadInstance.on('start', function () {
             // template.currentUpload.set(this);
         });
+        uploadInstance.on('uploaded', (err, fileObj)=> {
+            if (err) {
+                console.log('uploaded', err);
+            } else {
+                if (fileObj.error) {
+                    if (fileObj.error.name === 'placeholders-validation') {
+                        Modal.show('Error_template', {
+                            error: fileObj.error,
+                            definedCols: columns,
+                            fileName: this.adTemplateBeforeUpload.name
+                        });
+                    }
+                } else {
 
+                }
+            }
+        });
         uploadInstance.on('end', function (error, fileObj) {
             if (error) {
                 alert('Error during upload: ' + error.reason);

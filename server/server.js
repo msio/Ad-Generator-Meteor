@@ -11,22 +11,10 @@ Meteor.methods({
         const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
         var htmlFile = fs.readFileSync(template.path, 'utf8');
-
-
         const res = validateSpreadsheet(data.path);
         if (res.name !== 'ok') {
             throw new Meteor.Error('spreadsheet validation', res);
         }
-        /*let output;
-         const excel2JsonSync = Meteor.wrapAsync(excel2Json);
-         try {
-         output = excel2JsonSync(data.path);
-         validateJsonFromExcel(output, doc.spreadsheetId);
-         } catch (e) {
-         //Data.remove({_id: doc.spreadsheetId});
-         throw e;
-         }
-         */
         const array = res.data;
         const regex = /{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g
         const matches = htmlFile.match(regex);
