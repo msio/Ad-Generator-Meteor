@@ -5,8 +5,8 @@
 Meteor.startup(function () {
     sAlert.config({
         effect: 'stackslide',
-        position: 'top-right',
-        timeout: 3000,
+        position: 'top',
+        timeout: 5000,
         html: true
     });
 

@@ -39,10 +39,19 @@ AdTemplates = new Meteor.Files({
 
     },
     onAfterUpload: function (fileRef) {
-        //for async only
-        // const myFuture = new Future();
+        //check if the file name already exist
+        const foundedTpl = AdTemplates.find({name: fileRef.name});
+        if (foundedTpl.count() > 1) {
+            AdTemplates.remove({_id: fileRef._id});
+            fileRef.error = {
+                name: 'duplicate-file-name',
+            };
+            return fileRef;
+        }
+
+        //validate template against placeholders
         const fs = Npm.require('fs');
-        const tpl = fs.readFileSync(fileRef.path, 'utf8');
+        const tplFile = fs.readFileSync(fileRef.path, 'utf8');
         let errorCols = [];
         columns.forEach(col => {
             let regex;
@@ -51,12 +60,13 @@ AdTemplates = new Meteor.Files({
             } else {
                 regex = new RegExp('{' + col.name + '\\d}', 'g');
             }
-            const matches = tpl.match(regex);
+            const matches = tplFile.match(regex);
             if (matches == null) {
                 errorCols.push(col);
             }
         });
         if (errorCols.length !== 0) {
+            AdTemplates.remove({_id: fileRef._id});
             fileRef.error = {
                 name: 'placeholders-validation',
                 type: 'missing-placeholders',

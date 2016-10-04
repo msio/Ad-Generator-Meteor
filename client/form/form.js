@@ -63,17 +63,20 @@ Template.form.events({
                             definedCols: columns,
                             fileName: this.adTemplateBeforeUpload.name
                         });
+                    } else if (fileObj.error.name === 'duplicate-file-name') {
+                        sAlert.error('Template file name <strong>' + fileObj.name + '</strong> already exists');
                     }
                 } else {
 
                 }
             }
+            return false;
         });
         uploadInstance.on('end', function (error, fileObj) {
             if (error) {
                 alert('Error during upload: ' + error.reason);
-            } else {
-                sAlert.success('Template <strong>fileObj.name</strong> has been uploaded');
+            } else if (!fileObj.error) {
+                sAlert.success('Template <strong>' + fileObj.name + '</strong> has been uploaded');
                 $('.js-ad-template-input').fileinput('reset');
                 SelectedAdTemplate.remove({});
             }
