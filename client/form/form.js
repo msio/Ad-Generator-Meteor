@@ -64,7 +64,7 @@ Template.form.events({
                             fileName: this.adTemplateBeforeUpload.name
                         });
                     } else if (fileObj.error.name === 'duplicate-file-name') {
-                        sAlert.error('Template file name <strong>' + fileObj.name + '</strong> already exists');
+                        sAlert.warning('Template file name <strong>' + fileObj.name + '</strong> already exists');
                     }
                 } else {
 

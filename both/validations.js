@@ -5,14 +5,6 @@
 import {_} from 'lodash';
 import {columns} from  './columns.js';
 
-export function validateTemplateFileName (fileName){
-    // const regex = /(\d+)(\x|\X)(\d+)/;
-  // const matches = fileName.
-}
-
-export function validateTemplate(input){
-
-}
 
 export function validateSpreadsheet(input) {
     let workbook;
@@ -40,6 +32,8 @@ export function validateSpreadsheet(input) {
 
     let missingRows = [];
     let invalidCols = [];
+    //just array of strings a not defined array ob objects
+    const columns = _.map(columns,['name']);
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);
         const diffMissingRows = _.difference(columns, curObjKeys);
