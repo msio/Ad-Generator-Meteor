@@ -36,7 +36,7 @@ Template.form.events({
             spreadsheetId: SelectedData.find().fetch()[0].dataId
         }, function (err, res) {
             if (err) {
-
+                console.log(err);
             } else {
                 console.log('result', res);
             }
@@ -61,7 +61,7 @@ Template.form.events({
                         Modal.show('Error_template', {
                             error: fileObj.error,
                             definedCols: columns,
-                            fileName: this.adTemplateBeforeUpload.name
+                            fileName: fileObj.name
                         });
                     } else if (fileObj.error.name === 'duplicate-file-name') {
                         sAlert.warning('Template file name <strong>' + fileObj.name + '</strong> already exists');

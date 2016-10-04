@@ -33,11 +33,11 @@ export function validateSpreadsheet(input) {
     let missingRows = [];
     let invalidCols = [];
     //just array of strings a not defined array ob objects
-    const columns = _.map(columns,['name']);
+    const columnNames = _.map(columns, 'name');
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);
-        const diffMissingRows = _.difference(columns, curObjKeys);
-        const diffInvalidRows = _.difference(curObjKeys, columns);
+        const diffMissingRows = _.difference(columnNames, curObjKeys);
+        const diffInvalidRows = _.difference(curObjKeys, columnNames);
         if (diffMissingRows.length > 0) {
             //spreadsheet begins with 1 and array begins with 0
             diffMissingRows.forEach(row => {

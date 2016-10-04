@@ -24,22 +24,21 @@ Meteor.methods({
             if (matchedPos >= 0) {
                 const headerName = match.substring(1, matchedPos);
                 const num = match.split('')[matchedPos];
-                htmlFile = htmlFile.replace(new RegExp(match, 'g'), array[num -1][headerName]);
+                htmlFile = htmlFile.replace(new RegExp(match, 'g'), array[num - 1][headerName]);
             } else {
-                // console.log(match, array[0][match.substring(1, match.length - 1)]);
                 htmlFile = htmlFile.replace(match, array[0][match.substring(1, match.length - 1)]);
             }
         });
+        console.log(htmlFile);
+
+        //TODO valid just for hardcoded placehoders {ad_name}-{campaign}-size.html
+        const fileName = array[0]['ad_name'] + '-' + array[0]['campaign'] + '-' + template.resolution+'.html';
+        //write result into FS
+        console.log(fileName);
+        writeFile.sync('/Users/Msio/adTemplating/results/' + fileName, htmlFile);
 
         // ResultAds.
 
-        const writelFileSync = Meteor.async(writeFile);
-        // write
-
-
-        writeFile('/Users/Msio/adTemplating/results/test.html',htmlFile,function (err) {
-
-        });
 
         /**
          *

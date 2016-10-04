@@ -23,6 +23,10 @@ AdTemplates = new Meteor.Files({
     collectionName: 'AdTemplates',
     storagePath: '/Users/Msio/adTemplating/templates',
     allowClientCode: true,
+    namingFunction: function (file) {
+        //only file name without .html extension
+        return file.name.substring(0, file.name.length - 5);
+    },
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !/html/i.test(file.extension)) {
             return 'Please upload html, with size equal or less than 10MB';
@@ -35,6 +39,7 @@ AdTemplates = new Meteor.Files({
         if (matches.length > 1) {
             return 'no-unique-size'
         }
+        file.resolution = matches[0];
         return true;
 
     },
@@ -83,6 +88,9 @@ Data = new Meteor.Files({
     collectionName: 'Data',
     storagePath: '/Users/Msio/adTemplating/data',
     allowClientCode: true,
+    namingFunction: function (file) {
+        return file.name;
+    },
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
