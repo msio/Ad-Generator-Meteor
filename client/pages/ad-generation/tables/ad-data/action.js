@@ -11,15 +11,27 @@ Template.action.events({
     'click .js-select': function (e, tpl) {
         const row = $(e.target).closest('tr');
         //multiple selection
-        if (row.hasClass('selected')) {
+        /*if (row.hasClass('selected')) {
             row.removeClass('selected');
             tpl.selectState.set('Select');
-            SelectedAdData.remove({dataId: this._id});
+            SelectedAdData.remove({adDataId: this._id});
         } else {
             row.addClass('selected');
             tpl.selectState.set('Unselect');
-            SelectedAdData.insert({dataId: this._id});
+            SelectedAdData.insert({adDataId: this._id});
+        }*/
+
+        const dataTable = $(e.target).closest('table').DataTable();
+        //single selection
+        if (row.hasClass('selected')) {
+            row.removeClass('selected');
+            SelectedAdData.remove({adDataId: this._id});
+        } else {
+            dataTable.$('tr.selected').removeClass('selected');
+            row.addClass('selected');
+            SelectedAdData.insert({adDataId: this._id});
         }
+
     },
     'click .js-remove': function (e, tpl) {
         AdData.remove({_id: this._id}, (err)=> {

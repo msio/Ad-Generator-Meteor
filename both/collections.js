@@ -120,6 +120,7 @@ TabularTables.AdData = new Tabular.Table({
     name: 'AdData',
     collection: AdData.collection,
     autoWidth: false,
+    searching: false,
     columns: [
         {data: 'name', title: 'Name'},
         {
@@ -139,6 +140,7 @@ TabularTables.AdTemplates = new Tabular.Table({
     name: 'AdTemplates',
     collection: AdTemplates.collection,
     autoWidth: false,
+    searching: false,
     columns: [
         {data: 'name', title: 'Name'},
         {
@@ -146,10 +148,10 @@ TabularTables.AdTemplates = new Tabular.Table({
             if (val instanceof Date) {
                 return moment(val).format()
             }
-        }
+        }, searchable: false
         },
         {
-            tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action
+            tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action, searchable: false
         }
     ]
 });
@@ -159,6 +161,7 @@ TabularTables.GeneratedAds = new Tabular.Table({
     name: 'GeneratedAds',
     collection: GeneratedAds.collection,
     autoWidth: false,
+    searching: false,
     columns: [
         {data: 'name', title: 'Name'},
         {

@@ -22,6 +22,8 @@ Meteor.methods({
         if (res.name !== 'ok') {
             throw new Meteor.Error('spreadsheet validation', res);
         }
+        //TODO check number of columns and number of placeholders it they match!!!!!!!!
+
         const array = res.data;
         const regex = /{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g
         const matches = htmlFile.match(regex);
