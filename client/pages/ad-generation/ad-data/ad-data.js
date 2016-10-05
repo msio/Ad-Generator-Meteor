@@ -39,7 +39,7 @@ Template.AdData.events({
                 alert('error')
             } else {
                 sAlert.success('Excel Spreadsheet <strong>' + fileObj.name + '</strong> has been uploaded');
-                SelectedData.remove({});
+                SelectedAdData.remove({});
                 $('.js-data-input').fileinput('reset');
             }
         });

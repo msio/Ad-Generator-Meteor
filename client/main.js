@@ -11,6 +11,7 @@ sAlert.config({
     effect: 'stackslide',
     position: 'top',
     timeout: 4000,
-    html: true
+    html: true,
+    stack: false
 });
 
