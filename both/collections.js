@@ -86,9 +86,9 @@ AdTemplates = new Meteor.Files({
 });
 
 
-Data = new Meteor.Files({
+AdData = new Meteor.Files({
     debug: false,
-    collectionName: 'Data',
+    collectionName: 'AdData',
     storagePath: function () {
         return Meteor.isServer && Meteor.settings.private.dataPath
     },
@@ -111,14 +111,14 @@ Data = new Meteor.Files({
 });
 
 
-SelectedData = new Mongo.Collection(null);
+SelectedAdData = new Mongo.Collection(null);
 SelectedAdTemplate = new Mongo.Collection(null);
 
 TabularTables = {};
 
-TabularTables.Data = new Tabular.Table({
-    name: 'Data',
-    collection: Data.collection,
+TabularTables.AdData = new Tabular.Table({
+    name: 'AdData',
+    collection: AdData.collection,
     columns: [
         {data: 'name', title: 'Name'},
         {

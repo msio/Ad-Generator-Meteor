@@ -1,3 +1,5 @@
+import {Template} from 'meteor/templating';
+
 Template.AdGeneration_table_adTemplates_action.helpers({
     file: function () {
         return Template.instance().file.get();

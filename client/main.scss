@@ -1,5 +1,23 @@
 //@import "{}/node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
+body{
+  background-color: #f5f7fa;
+}
+
 .warning-background {
   background-color: #F1C40F;
+}
+
+table tbody {
+  tr.selected {
+    background-color: #337ab7 !important;
+  }
+  .selected td {
+    color: #FFFFFF;
+  }
+}
+
+.button-generate {
+  text-align: center;
+  margin-bottom: 20px;
 }

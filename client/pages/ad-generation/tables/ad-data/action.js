@@ -14,15 +14,15 @@ Template.action.events({
         if (row.hasClass('selected')) {
             row.removeClass('selected');
             tpl.selectState.set('Select');
-            SelectedData.remove({dataId: this._id});
+            SelectedAdData.remove({dataId: this._id});
         } else {
             row.addClass('selected');
             tpl.selectState.set('Unselect');
-            SelectedData.insert({dataId: this._id});
+            SelectedAdData.insert({dataId: this._id});
         }
     },
     'click .js-remove': function (e, tpl) {
-        Data.remove({_id: this._id}, (err)=> {
+        AdData.remove({_id: this._id}, (err)=> {
             if (err) {
                 console.log(err);
             } else {
@@ -33,7 +33,7 @@ Template.action.events({
 });
 
 Template.action.onCreated(function () {
-    this.file = new ReactiveVar(Data.findOne({_id: this.data._id}));
+    this.file = new ReactiveVar(AdData.findOne({_id: this.data._id}));
     this.selectState = new ReactiveVar('Select');
 });
 Template.action.onRendered(function () {

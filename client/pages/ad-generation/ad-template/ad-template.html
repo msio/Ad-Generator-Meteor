@@ -1,0 +1,10 @@
+<template name="AdTemplate">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <h4>Templates</h4>
+            <input type="file" class="js-ad-template-input file file-loading" data-main-class="ad-template-input"
+                   data-allowed-file-extensions='["html"]'>
+            {{> tabular table=TabularTables.AdTemplates  class="table table-striped table-condensed ad-templates-table"}}
+        </div>
+    </div>
+</template>

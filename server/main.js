@@ -18,9 +18,9 @@ Meteor.publish('adTemplates.all', function () {
 });
 
 
-Data.denyClient();
-Meteor.publish('data.all', function () {
-    return Data.find().cursor;
+AdData.denyClient();
+Meteor.publish('adData.all', function () {
+    return AdData.find().cursor;
 });
 
 Meteor.publish('generatedAds.all', function () {

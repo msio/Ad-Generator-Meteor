@@ -11,10 +11,10 @@ Meteor.methods({
         //TODO check if template file was found if not tell user
         const adTemplate = AdTemplates.collection.findOne(doc.adTemplateId);
         //TODO check if excel file was found if not tell user
-        const data = Data.collection.findOne(doc.spreadsheetId);
+        const adData = AdData.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
         var htmlFile = fs.readFileSync(adTemplate.path, 'utf8');
-        const res = validateSpreadsheet(data.path);
+        const res = validateSpreadsheet(adData.path);
         if (res.name !== 'ok') {
             throw new Meteor.Error('spreadsheet validation', res);
         }
@@ -44,32 +44,13 @@ Meteor.methods({
             meta: {
                 created: new Date(),
                 adTemplateId: adTemplate._id,
-                dataId: data._id
+                dataId: adData._id
             }
         }, (err)=> {
             if (err) {
                 throw new Meteor.Error('Generated Add could not be added to FilesCollection \'GeneratedAds\'');
             }
         });
-
-
-        /**
-         *
-         * if(publisher == global){
-         *     if(publisher is without number){
-         *         take value from object a replace
-         *     }
-         *
-         * }
-         * ....
-         *
-         *
-         *
-         *
-         *
-         */
-
-
     }
 });
 
