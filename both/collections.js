@@ -94,7 +94,13 @@ Data = new Meteor.Files({
     },
     allowClientCode: true,
     namingFunction: function (file) {
-        return file.name;
+        switch (file.extension) {
+            case 'xlsx':
+            case 'xlsm':
+                return file.name.substring(0, file.name.length - 5);
+            case 'xls':
+                return file.name.substring(0, file.name.length - 4);
+        }
     },
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
