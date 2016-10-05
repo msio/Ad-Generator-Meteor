@@ -2,7 +2,7 @@
   "name": "meteor-files-demo-insert",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --settings settings-development.json"
   },
   "dependencies": {
     "bootstrap-fileinput-npm": "^4.2.8",

@@ -11,17 +11,18 @@ import
     './columns.js';
 }
 
-ResultAds = new Meteor.Files({
+GeneratedAds = new Meteor.Files({
     debug: false,
-    collectionName: 'ResultAds',
-    storagePath: '/Users/Msio/adTemplating/results',
+    collectionName: 'GeneratedAds',
     allowClientCode: false
 });
 
 AdTemplates = new Meteor.Files({
     debug: false,
     collectionName: 'AdTemplates',
-    storagePath: '/Users/Msio/adTemplating/templates',
+    storagePath: function () {
+        return Meteor.isServer && Meteor.settings.private.adTemplatesPath;
+    },
     allowClientCode: true,
     namingFunction: function (file) {
         //only file name without .html extension
@@ -86,7 +87,9 @@ AdTemplates = new Meteor.Files({
 Data = new Meteor.Files({
     debug: false,
     collectionName: 'Data',
-    storagePath: '/Users/Msio/adTemplating/data',
+    storagePath: function () {
+        return Meteor.isServer && Meteor.settings.private.dataPath
+    },
     allowClientCode: true,
     namingFunction: function (file) {
         return file.name;
@@ -119,6 +122,18 @@ TabularTables.Data = new Tabular.Table({
 TabularTables.AdTemplates = new Tabular.Table({
     name: 'AdTemplates',
     collection: AdTemplates.collection,
+    columns: [
+        {data: 'name', title: 'Name'},
+        {
+            tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action
+        }
+    ]
+});
+
+
+TabularTables.GeneratedAds = new Tabular.Table({
+    name: 'GeneratedAds',
+    collection: GeneratedAds.collection,
     columns: [
         {data: 'name', title: 'Name'},
         {
