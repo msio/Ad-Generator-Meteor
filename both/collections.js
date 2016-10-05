@@ -119,8 +119,16 @@ TabularTables = {};
 TabularTables.AdData = new Tabular.Table({
     name: 'AdData',
     collection: AdData.collection,
+    autoWidth: false,
     columns: [
         {data: 'name', title: 'Name'},
+        {
+            data: 'meta.uploaded', title: 'Uploaded At', render: function (val, type, doc) {
+            if (val instanceof Date) {
+                return moment(val).format()
+            }
+        }
+        },
         {
             tmpl: Meteor.isClient && Template.action
         }
@@ -130,8 +138,16 @@ TabularTables.AdData = new Tabular.Table({
 TabularTables.AdTemplates = new Tabular.Table({
     name: 'AdTemplates',
     collection: AdTemplates.collection,
+    autoWidth: false,
     columns: [
         {data: 'name', title: 'Name'},
+        {
+            data: 'meta.uploaded', title: 'Uploaded At', render: function (val, type, doc) {
+            if (val instanceof Date) {
+                return moment(val).format()
+            }
+        }
+        },
         {
             tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action
         }
@@ -142,12 +158,13 @@ TabularTables.AdTemplates = new Tabular.Table({
 TabularTables.GeneratedAds = new Tabular.Table({
     name: 'GeneratedAds',
     collection: GeneratedAds.collection,
+    autoWidth: false,
     columns: [
         {data: 'name', title: 'Name'},
         {
             data: 'meta.created', title: 'Generated At', render: function (val, type, doc) {
             if (val instanceof Date) {
-                return moment(val).format('L')
+                return moment(val).format()
             }
         }
         },

@@ -1,13 +1,17 @@
 require('bootstrap-fileinput-npm');
 import {columns} from '../../../../both/columns.js';
 import {validateSpreadsheet} from '../../../../both/validations.js';
+import moment from 'moment';
 
 Template.AdData.events({
     'click .data-input .fileinput-upload-button': function () {
         const uploadInstance = AdData.insert({
             file: this.beforeUpload,
             streams: 'dynamic',
-            chunkSize: 'dynamic'
+            chunkSize: 'dynamic',
+            meta: {
+                uploaded: moment().toDate()
+            }
         }, false);
 
         const reader = new FileReader();

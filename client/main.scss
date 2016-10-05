@@ -1,6 +1,6 @@
 //@import "{}/node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
-body{
+body {
   background-color: #f5f7fa;
 }
 
@@ -17,7 +17,18 @@ table tbody {
   }
 }
 
+.panel .panel-body h4 {
+  margin-bottom: 20px;
+}
+
 .button-generate {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
+  button {
+    width: 300px;
+  }
+}
+
+.input-file-container {
+  margin-bottom: 25px;
 }

@@ -1,13 +1,17 @@
 import {Template} from 'meteor/templating';
 require('bootstrap-fileinput-npm');
 import {columns} from '../../../../both/columns.js';
+import moment from 'moment';
 
 Template.AdTemplate.events({
     'click .ad-template-input .fileinput-upload-button': function () {
         const uploadInstance = AdTemplates.insert({
             file: this.beforeUpload,
             streams: 'dynamic',
-            chunkSize: 'dynamic'
+            chunkSize: 'dynamic',
+            meta: {
+                uploaded: moment().toDate()
+            }
         }, false);
         uploadInstance.on('start', function () {
             // template.currentUpload.set(this);
@@ -60,13 +64,5 @@ Template.AdTemplate.onCreated(function () {
     this.autorun(()=> {
         this.subscribe('adTemplates.all');
     })
-});
-
-Template.AdTemplate.onRendered(function () {
-    //add your statement here
-});
-
-Template.AdTemplate.onDestroyed(function () {
-    //add your statement here
 });
 
