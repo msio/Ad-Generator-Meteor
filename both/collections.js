@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 if (Meteor.isServer) {
 import
     Future
@@ -14,7 +16,7 @@ import
 GeneratedAds = new Meteor.Files({
     debug: false,
     collectionName: 'GeneratedAds',
-    allowClientCode: false
+    allowClientCode: true
 });
 
 AdTemplates = new Meteor.Files({
@@ -137,7 +139,14 @@ TabularTables.GeneratedAds = new Tabular.Table({
     columns: [
         {data: 'name', title: 'Name'},
         {
-            tmpl: Meteor.isClient && Template.AdGeneration_table_adTemplates_action
+            data: 'meta.created', title: 'Generated At', render: function (val, type, doc) {
+            if (val instanceof Date) {
+                return moment(val).format('L')
+            }
+        }
+        },
+        {
+            tmpl: Meteor.isClient && Template.Adgenration_table_generatedAds_action
         }
     ]
 });

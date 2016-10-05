@@ -9,11 +9,11 @@ Meteor.methods({
         const generatedAd = GeneratedAds.find({meta: {}});
 
         //TODO check if template file was found if not tell user
-        const adtemplate = AdTemplates.collection.findOne(doc.adTemplateId);
+        const adTemplate = AdTemplates.collection.findOne(doc.adTemplateId);
         //TODO check if excel file was found if not tell user
         const data = Data.collection.findOne(doc.spreadsheetId);
         var fs = Npm.require('fs');
-        var htmlFile = fs.readFileSync(adtemplate.path, 'utf8');
+        var htmlFile = fs.readFileSync(adTemplate.path, 'utf8');
         const res = validateSpreadsheet(data.path);
         if (res.name !== 'ok') {
             throw new Meteor.Error('spreadsheet validation', res);
@@ -33,8 +33,8 @@ Meteor.methods({
         });
 
         //TODO valid just for hardcoded placehoders {ad_name}-{campaign}-size.html
-        const fileName = array[0]['ad_name'] + '-' + array[0]['campaign'] + '-' + adtemplate.resolution + '.html';
-        const savingPath = Meteor.settings.private.generatedAds + fileName;
+        const fileName = array[0]['ad_name'] + '-' + array[0]['campaign'] + '-' + adTemplate.resolution + '.html';
+        const savingPath = Meteor.settings.private.generatedAdsPath + fileName;
         //write result into FS
         writeFile.sync(savingPath, htmlFile);
         //add file reference into db
@@ -43,7 +43,7 @@ Meteor.methods({
             type: 'text/html',
             meta: {
                 created: new Date(),
-                adTemplateId: adtemplate._id,
+                adTemplateId: adTemplate._id,
                 dataId: data._id
             }
         }, (err)=> {

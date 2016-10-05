@@ -10,6 +10,7 @@
     "fibers": "^1.0.14",
     "lodash": "^4.16.2",
     "meteor-node-stubs": "^0.2.3",
+    "moment": "^2.15.1",
     "node-excel-to-json": "0.0.3",
     "simple-replace": "0.0.2",
     "string-search": "^1.2.0",
