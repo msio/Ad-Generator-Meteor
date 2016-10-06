@@ -64,28 +64,51 @@ AdTemplates = new Meteor.Files({
         //validate template against placeholders
         const fs = Npm.require('fs');
         const tplFile = fs.readFileSync(fileRef.path, 'utf8');
-        let errorCols = [];
+        let missingPlaceholders = [];
+        let notGlobalColumns = [];
         columns.forEach(col => {
             let regex;
             if (col.global) {
                 regex = new RegExp('{' + col.name + '}', 'g');
             } else {
+                notGlobalColumns.push(col);
                 regex = new RegExp('{' + col.name + '\\d}', 'g');
             }
             const matches = tplFile.match(regex);
             if (matches == null) {
-                errorCols.push(col);
+                if (col.global) {
+                    missingPlaceholders.push('{' + col + '}');
+                } else {
+                    missingPlaceholders.push('{' + col + '(Number)}');
+                }
             }
         });
+        const validPlaceholders = tplFile.match(/{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g);
+
         if (errorCols.length !== 0) {
             AdTemplates.remove({_id: fileRef._id});
             fileRef.error = {
                 name: 'placeholders-validation',
                 type: 'missing-placeholders',
-                placeholders: errorCols
+                placeholders: missingPlaceholders
             };
+            return fileRef;
         }
-        return fileRef;
+        //validate template if not global placeholders have correct ordering
+        errorNotGlobalColumns = [];
+        notGlobalColumns.forEach(col => {
+            const matches = tplFile.match(new RegExp('{' + col.name + '\\d}', 'g'));
+            matches.forEach((match, idx) => {
+                const matchedPos = match.search(/(\d+)/i);
+                const num = match.split('')[matchedPos];
+                console.log(match, num);
+                if (num !== idx + 1) {
+
+                }
+            });
+
+        });
+
     }
 });
 

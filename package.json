@@ -7,15 +7,9 @@
   "dependencies": {
     "bootstrap-fileinput-npm": "^4.2.8",
     "bootstrap-sass": "^3.3.7",
-    "fibers": "^1.0.14",
     "lodash": "^4.16.2",
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.15.1",
-    "node-excel-to-json": "0.0.3",
-    "simple-replace": "0.0.2",
-    "string-search": "^1.2.0",
-    "write": "^0.3.2",
-    "xlsx": "^0.8.0",
-    "xlsx-browserify-shim": "0.0.5"
+    "write": "^0.3.2"
   }
 }

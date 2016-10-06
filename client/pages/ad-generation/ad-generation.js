@@ -25,7 +25,7 @@ Template.form.events({
 
         Meteor.call('generateAd', {
             adTemplateId: SelectedAdTemplate.find().fetch()[0].adTemplateId,
-            AdDataId: SelectedAdData.find().fetch()[0].adDataId
+            adDataId: SelectedAdData.find().fetch()[0].adDataId
         }, function (err, res) {
             if (err) {
                 if (err.error === 'duplicated-generation') {
