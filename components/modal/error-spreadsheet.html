@@ -10,12 +10,10 @@
                     {{#if equals error.type 'cols-error'}}
                         <h4>Missing Cells and Columns</h4>
                         {{#each error.cols.missingRows}}
-                            {{#if rowIndex}}
-                                <strong>Cells:</strong>
-                                <p><strong>{{rowIndex}}</strong> - {{colName}}</p>
-                            {{else}}
-                                <strong>Columns:</strong>
+                            {{#if equals rowIndex -1}}
                                 | {{colName}}
+                            {{else}}
+                                <p><strong>Cell {{rowIndex}}</strong> - {{colName}}</p>
                             {{/if}}
                         {{/each}}
                         <h4>Invalid Columns</h4>

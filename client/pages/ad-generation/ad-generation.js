@@ -23,10 +23,9 @@ Template.form.events({
         }
 
 
-        Meteor.call('replacePlaceholders', {
-            //single selection mode therefore there is only one ad template id in the local collection
+        Meteor.call('generateAd', {
             adTemplateId: SelectedAdTemplate.find().fetch()[0].adTemplateId,
-            spreadsheetId: SelectedAdData.find().fetch()[0].adDataId
+            AdDataId: SelectedAdData.find().fetch()[0].adDataId
         }, function (err, res) {
             if (err) {
                 if (err.error === 'duplicated-generation') {

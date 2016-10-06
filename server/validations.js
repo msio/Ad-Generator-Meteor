@@ -20,6 +20,7 @@ export function validateSpreadsheet(filePath) {
     }
 
     let missingRows = [];
+    let missingCols = [];
     let invalidCols = [];
     //just array of strings a not defined array ob objects
     const columnNames = _.map(columns, 'name');
@@ -34,7 +35,7 @@ export function validateSpreadsheet(filePath) {
                 const found = _.findLast(missingRows, ['colName', row]);
                 if (found && found.rowIndex === array.length) {
                     _.remove(missingRows, ['colName', row]);
-                    found.rowIndex = false;
+                    found.rowIndex = -1;
                     missingRows.push(found);
                 }
             });

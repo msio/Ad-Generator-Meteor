@@ -1,8 +1,9 @@
 <template name="home">
     {{> sAlert}}
-    <div class="bs-example">
-        <nav role="navigation" class="navbar navbar-default">
-            <!-- Brand and toggle get grouped for better mobile display -->
+    <nav role="navigation" class="navbar navbar-default">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="container">
+
             <div class="navbar-header">
                 <button type="button" data-target="#navbarCollapse" data-toggle="collapse" class="navbar-toggle">
                     <span class="sr-only">Toggle navigation</span>
@@ -18,7 +19,9 @@
                     <li class="active"><a href="#">Ad Generation</a></li>
                 </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
+    <div class="container">
+        {{> Template.dynamic template=main }}
     </div>
-    {{> Template.dynamic template=main }}
 </template>

@@ -124,6 +124,7 @@ AdData = new Meteor.Files({
         }
         const res = validateSpreadsheet(fileRef.path);
         if (res.name !== 'ok') {
+            AdData.remove({_id: fileRef._id});
             fileRef.error = res;
         }
         return fileRef;
