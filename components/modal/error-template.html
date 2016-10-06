@@ -7,8 +7,12 @@
                 </div>
                 <div class="modal-body">
                     <p><strong>Template file:</strong> {{fileName}}</p>
-                    <h4>Missing placeholders</h4>
-                    {{#each error.placeholders}}
+                    <h4>Missing Placeholders</h4>
+                    {{#each error.placeholders.missing}}
+                        <p><strong>{{name}}</strong></p>
+                    {{/each}}
+                    <h4>Invalid Placeholders</h4>
+                    {{#each error.placeholders.invalid}}
                         <p><strong>{{name}}</strong></p>
                     {{/each}}
                     <h4>Defined Placeholders</h4>

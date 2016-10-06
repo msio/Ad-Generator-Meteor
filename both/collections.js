@@ -14,6 +14,12 @@ import
     }
     from
     '../server/validations.js';
+import
+    {
+        _
+    }
+    from
+    'lodash';
 }
 
 
@@ -83,14 +89,18 @@ AdTemplates = new Meteor.Files({
                 }
             }
         });
-        const validPlaceholders = tplFile.match(/{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g);
 
-        if (errorCols.length !== 0) {
+        //TODO temp impl. it can be impl by one regex
+        const validPlaceholders = tplFile.match(/{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g);
+        const allPlaceholders = tplFile.match(/{.+}/g);
+        const invalidPlaceholders = _.difference(allPlaceholders, validPlaceholders);
+
+        if (!_.isEmpty(missingPlaceholders) || !_.isEmpty(invalidPlaceholders)) {
             AdTemplates.remove({_id: fileRef._id});
             fileRef.error = {
                 name: 'placeholders-validation',
                 type: 'missing-placeholders',
-                placeholders: missingPlaceholders
+                placeholders: {missing: missingPlaceholders, invalid: invalidPlaceholders}
             };
             return fileRef;
         }
