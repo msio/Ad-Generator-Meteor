@@ -13,12 +13,9 @@ Template.AdTemplate.events({
                 uploaded: moment().toDate()
             }
         }, false);
-        uploadInstance.on('start', function () {
-            // template.currentUpload.set(this);
-        });
         uploadInstance.on('uploaded', (err, fileObj)=> {
             if (err) {
-                console.log('uploaded', err);
+                sAlert.error('Upload failed, try again please!');
             } else {
                 if (fileObj.error) {
                     if (fileObj.error.name === 'placeholders-validation') {
@@ -31,22 +28,19 @@ Template.AdTemplate.events({
                         sAlert.warning('Template file name <strong>' + fileObj.name + '</strong> already exists');
                     }
                 } else {
-
+                    //upload successful
                 }
             }
-            return false;
         });
         uploadInstance.on('end', function (error, fileObj) {
             if (error) {
-                alert('Error during upload: ' + error.reason);
+                sAlert.error('Upload failed, try again please!');
             } else if (!fileObj.error) {
                 sAlert.success('Template <strong>' + fileObj.name + '</strong> has been uploaded');
                 $('.js-ad-template-input').fileinput('reset');
                 SelectedAdTemplate.remove({});
             }
-            // template.currentUpload.set(false);
         });
-
         uploadInstance.start();
     },
     'change .js-ad-template-input': function (e) {

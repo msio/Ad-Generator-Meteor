@@ -1,6 +1,5 @@
 require('bootstrap-fileinput-npm');
 import {columns} from '../../../../both/columns.js';
-import {validateSpreadsheet} from '../../../../both/validations.js';
 import moment from 'moment';
 
 Template.AdData.events({
@@ -13,36 +12,35 @@ Template.AdData.events({
                 uploaded: moment().toDate()
             }
         }, false);
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const res = validateSpreadsheet(e.target.result);
-            if (res.name === 'excel-data') {
-                Modal.show('Error_spreadsheet_modal', {
-                    error: error,
-                    definedCols: columns,
-                    fileName: this.beforeUpload.name
-                });
+        uploadInstance.on('uploaded', (err, fileObj)=> {
+            if (err) {
+                sAlert.error('Upload failed, try again please!');
             } else {
-                uploadInstance.start();
+                if (fileObj.error) {
+                    if (fileObj.error.name === 'excel-data') {
+                        Modal.show('Error_spreadsheet_modal', {
+                            error: fileObj.error,
+                            definedCols: columns,
+                            fileName: this.beforeUpload.name
+                        });
+                    } else if (fileObj.error.name === 'duplicate-file-name') {
+                        sAlert.warning('Excel file name <strong>' + fileObj.name + '</strong> already exists');
+                    }
+                } else {
+                    //upload successful
+                }
             }
-        };
-        reader.error = (e)=> {
-            //TODO alert
-            console.log(e);
-            // alert error
-        };
-        reader.readAsBinaryString(this.beforeUpload);
+        });
         uploadInstance.on('end', (error, fileObj) => {
             if (error) {
-                console.log(error);
-                alert('error')
-            } else {
+                sAlert.error('Upload failed, try again please!');
+            } else if (!fileObj.error) {
                 sAlert.success('Excel Spreadsheet <strong>' + fileObj.name + '</strong> has been uploaded');
                 SelectedAdData.remove({});
                 $('.js-data-input').fileinput('reset');
             }
         });
+        uploadInstance.start();
     },
     'change .js-data-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {

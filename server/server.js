@@ -1,6 +1,6 @@
 var simpleReplace = require('simple-replace');
 var excel2Json = require('node-excel-to-json');
-import {validateSpreadsheet} from  '../both/validations.js';
+import {validateSpreadsheet} from  './validations.js';
 import writeFile from 'write';
 
 Meteor.methods({

@@ -2,16 +2,20 @@ import moment from 'moment';
 
 if (Meteor.isServer) {
 import
-    Future
-    from
-    'fibers/future';
-import
     {
         columns
     }
     from
     './columns.js';
+
+import
+    {
+        validateSpreadsheet
+    }
+    from
+    '../server/validations.js';
 }
+
 
 GeneratedAds = new Meteor.Files({
     debug: false,
@@ -107,6 +111,22 @@ AdData = new Meteor.Files({
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
         }
         return true;
+    },
+    onAfterUpload: function (fileRef) {
+        //check if the file name already exist
+        const foundedData = AdData.find({name: fileRef.name});
+        if (foundedData.count() > 1) {
+            AdData.remove({_id: fileRef._id});
+            fileRef.error = {
+                name: 'duplicate-file-name',
+            };
+            return fileRef;
+        }
+        const res = validateSpreadsheet(fileRef.path);
+        if (res.name !== 'ok') {
+            fileRef.error = res;
+        }
+        return fileRef;
     }
 });
 
