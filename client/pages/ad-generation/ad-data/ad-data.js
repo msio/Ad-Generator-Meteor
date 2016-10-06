@@ -1,4 +1,6 @@
-require('bootstrap-fileinput-npm');
+import {Template} from 'meteor/templating';
+
+import 'bootstrap-fileinput-npm';
 import {columns} from '../../../../both/columns.js';
 import moment from 'moment';
 
@@ -57,13 +59,5 @@ Template.AdData.onCreated(function () {
     this.autorun(()=> {
         this.subscribe('adData.all');
     })
-});
-
-Template.AdData.onRendered(function () {
-    //add your statement here
-});
-
-Template.AdData.onDestroyed(function () {
-    //add your statement here
 });
 

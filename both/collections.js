@@ -141,6 +141,7 @@ TabularTables.AdData = new Tabular.Table({
     collection: AdData.collection,
     autoWidth: false,
     searching: false,
+    stateSave: true,
     columns: [
         {data: 'name', title: 'Name'},
         {

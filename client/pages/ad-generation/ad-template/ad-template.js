@@ -1,5 +1,6 @@
 import {Template} from 'meteor/templating';
-require('bootstrap-fileinput-npm');
+
+import 'bootstrap-fileinput-npm';
 import {columns} from '../../../../both/columns.js';
 import moment from 'moment';
 
@@ -32,7 +33,7 @@ Template.AdTemplate.events({
                 }
             }
         });
-        uploadInstance.on('end', function (error, fileObj) {
+        uploadInstance.on('end', (error, fileObj)=> {
             if (error) {
                 sAlert.error('Upload failed, try again please!');
             } else if (!fileObj.error) {
