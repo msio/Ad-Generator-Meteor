@@ -128,7 +128,6 @@ AdTemplates = new Meteor.Files({
                     };
                     return fileRef;
                 }
-                console.log(match, num, idx + 1);
                 if (intNum !== idx + 1) {
                     errorNotGlobalColumns.push({name: placeholderName, missingIndex: idx + 1});
                 }
