@@ -82,42 +82,68 @@ AdTemplates = new Meteor.Files({
             }
             const matches = tplFile.match(regex);
             if (matches == null) {
-                if (col.global) {
-                    missingPlaceholders.push('{' + col + '}');
-                } else {
-                    missingPlaceholders.push('{' + col + '(Number)}');
-                }
+                missingPlaceholders.push(col);
             }
         });
 
         //TODO temp impl. it can be impl by one regex
         const validPlaceholders = tplFile.match(/{(publisher|campaign|keyword\d+|keyword_no_spaces\d+|domain\d+|ad_name|other_info|title)}/g);
-        const allPlaceholders = tplFile.match(/{.+}/g);
-        const invalidPlaceholders = _.difference(allPlaceholders, validPlaceholders);
+        const allPlaceholders = tplFile.match(/(\{([^}\s]+)+\})+?/g);
+        const invalidPlaceholders = _.uniq(_.difference(allPlaceholders, validPlaceholders));
 
         if (!_.isEmpty(missingPlaceholders) || !_.isEmpty(invalidPlaceholders)) {
             AdTemplates.remove({_id: fileRef._id});
             fileRef.error = {
                 name: 'placeholders-validation',
-                type: 'missing-placeholders',
+                type: 'missing-invalid-placeholders',
                 placeholders: {missing: missingPlaceholders, invalid: invalidPlaceholders}
             };
             return fileRef;
         }
+
+       /* if (!_.isEmpty(missingPlaceholders)) {
+            AdTemplates.remove({_id: fileRef._id});
+            fileRef.error = {
+                name: 'placeholders-validation',
+                type: 'missing--invalid-placeholders',
+                placeholders: {missing: missingPlaceholders, invalid: []}
+            };
+            return fileRef;
+        }*/
+
         //validate template if not global placeholders have correct ordering
-        errorNotGlobalColumns = [];
+        let errorNotGlobalColumns = [];
         notGlobalColumns.forEach(col => {
             const matches = tplFile.match(new RegExp('{' + col.name + '\\d}', 'g'));
             matches.forEach((match, idx) => {
                 const matchedPos = match.search(/(\d+)/i);
+                const placeholderName = match.substring(1, matchedPos);
                 const num = match.split('')[matchedPos];
-                console.log(match, num);
-                if (num !== idx + 1) {
-
+                const intNum = parseInt(num);
+                if (isNaN(intNum)) {
+                    fileRef.error = {
+                        name: 'placeholders-validation',
+                        type: 'missing-notGlobalplaceholder',
+                        placeholders: [{name: placeholderName, missingIndex: ''}]
+                    };
+                    return fileRef;
+                }
+                console.log(match, num, idx + 1);
+                if (intNum !== idx + 1) {
+                    errorNotGlobalColumns.push({name: placeholderName, missingIndex: idx + 1});
                 }
             });
-
         });
+
+        if (!_.isEmpty(errorNotGlobalColumns)) {
+            AdTemplates.remove({_id: fileRef._id});
+            fileRef.error = {
+                name: 'placeholders-validation',
+                type: 'missing-notGlobalplaceholder',
+                placeholders: errorNotGlobalColumns
+            };
+            return fileRef;
+        }
 
     }
 });
