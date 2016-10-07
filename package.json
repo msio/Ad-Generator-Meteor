@@ -11,6 +11,7 @@
     "lodash": "^4.16.2",
     "meteor-node-stubs": "^0.2.3",
     "moment": "^2.15.1",
-    "write": "^0.3.2"
+    "write": "^0.3.2",
+    "xlsx": "^0.8.0"
   }
 }
