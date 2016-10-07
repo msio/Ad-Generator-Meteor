@@ -105,7 +105,7 @@ AdTemplates = new Meteor.Files({
             AdTemplates.remove({_id: fileRef._id});
             fileRef.error = {
                 name: 'placeholders-validation',
-                type: 'missing--invalid-placeholders',
+                type: 'missing-invalid-placeholders',
                 placeholders: {missing: missingPlaceholders, invalid: []}
             };
             return fileRef;
