@@ -14,4 +14,3 @@ sAlert.config({
     html: true,
     stack: false
 });
-
