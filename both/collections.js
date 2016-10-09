@@ -36,10 +36,6 @@ AdTemplates = new Meteor.Files({
         return Meteor.isServer && Meteor.settings.private.adTemplatesPath;
     },
     allowClientCode: true,
-    namingFunction: function (file) {
-        //only file name without .html extension
-        return file.name.substring(0, file.name.length - 5);
-    },
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !/html/i.test(file.extension)) {
             return 'Please upload html, with size equal or less than 10MB';
@@ -101,15 +97,15 @@ AdTemplates = new Meteor.Files({
             return fileRef;
         }
 
-       /* if (!_.isEmpty(missingPlaceholders)) {
-            AdTemplates.remove({_id: fileRef._id});
-            fileRef.error = {
-                name: 'placeholders-validation',
-                type: 'missing-invalid-placeholders',
-                placeholders: {missing: missingPlaceholders, invalid: []}
-            };
-            return fileRef;
-        }*/
+        /* if (!_.isEmpty(missingPlaceholders)) {
+         AdTemplates.remove({_id: fileRef._id});
+         fileRef.error = {
+         name: 'placeholders-validation',
+         type: 'missing-invalid-placeholders',
+         placeholders: {missing: missingPlaceholders, invalid: []}
+         };
+         return fileRef;
+         }*/
 
         //validate template if not global placeholders have correct ordering
         let errorNotGlobalColumns = [];
@@ -155,15 +151,6 @@ AdData = new Meteor.Files({
         return Meteor.isServer && Meteor.settings.private.dataPath
     },
     allowClientCode: true,
-    namingFunction: function (file) {
-        switch (file.extension) {
-            case 'xlsx':
-            case 'xlsm':
-                return file.name.substring(0, file.name.length - 5);
-            case 'xls':
-                return file.name.substring(0, file.name.length - 4);
-        }
-    },
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
