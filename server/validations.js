@@ -20,9 +20,7 @@ export function validateSpreadsheet(filePath) {
     }
 
     let missingRows = [];
-    let missingCols = [];
     let invalidCols = [];
-    //just array of strings a not defined array ob objects
     const columnNames = _.map(columns, 'name');
     array.forEach((elem, idx)=> {
         const curObjKeys = Object.keys(elem);

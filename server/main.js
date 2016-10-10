@@ -10,7 +10,6 @@ Meteor.startup(function () {
     BrowserPolicy.content.allowEval();
     BrowserPolicy.content.allowOriginForAll('*');
     BrowserPolicy.content.allowFontDataUrl();
-
 });
 
 
