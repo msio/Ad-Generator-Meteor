@@ -34,12 +34,14 @@ Template.action.events({
 
     },
     'click .js-remove': function (e, tpl) {
+        UIBlock.block('Removing...');
         AdData.remove({_id: this._id}, (err)=> {
             if (err) {
-                console.log(err);
+                sAlert.error('Excel Data has not been removed');
             } else {
-                console.log('removed');
+                sAlert.success('Excel Data has been removed');
             }
+            UIBlock.unblock();
         });
     }
 });

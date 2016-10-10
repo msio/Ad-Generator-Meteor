@@ -14,6 +14,9 @@ Template.AdData.events({
                 uploaded: moment().toDate()
             }
         }, false);
+        uploadInstance.on('start', function () {
+            UIBlock.block('Uploading...');
+        });
         uploadInstance.on('uploaded', (err, fileObj)=> {
             if (err) {
                 sAlert.error('Upload failed, try again please!');
@@ -32,21 +35,23 @@ Template.AdData.events({
                     //upload successful
                 }
             }
+            UIBlock.unblock();
         });
         uploadInstance.on('end', (error, fileObj) => {
             if (error) {
                 sAlert.error('Upload failed, try again please!');
             } else if (!fileObj.error) {
                 sAlert.success('Excel Spreadsheet <strong>' + fileObj.name + '</strong> has been uploaded');
-                SelectedAdData.remove({});
                 $('.js-data-input').fileinput('reset');
+                SelectedAdData.remove({});
             }
+            UIBlock.unblock();
         });
         uploadInstance.start();
     },
     'change .js-data-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {
-            var file = e.currentTarget.files[0];
+            const file = e.currentTarget.files[0];
             if (file) {
                 this.beforeUpload = file;
             }

@@ -14,6 +14,9 @@ Template.AdTemplate.events({
                 uploaded: moment().toDate()
             }
         }, false);
+        uploadInstance.on('start', function () {
+            UIBlock.block('Uploading...');
+        });
         uploadInstance.on('uploaded', (err, fileObj)=> {
             if (err) {
                 sAlert.error('Upload failed, try again please!');
@@ -32,6 +35,7 @@ Template.AdTemplate.events({
                     //upload successful
                 }
             }
+            UIBlock.unblock();
         });
         uploadInstance.on('end', (error, fileObj)=> {
             if (error) {
@@ -41,12 +45,13 @@ Template.AdTemplate.events({
                 $('.js-ad-template-input').fileinput('reset');
                 SelectedAdTemplate.remove({});
             }
+            UIBlock.unblock();
         });
         uploadInstance.start();
     },
     'change .js-ad-template-input': function (e) {
         if (e.currentTarget.files && e.currentTarget.files[0]) {
-            var file = e.currentTarget.files[0];
+            const file = e.currentTarget.files[0];
             if (file) {
                 this.beforeUpload = file;
             }

@@ -24,12 +24,14 @@ Template.AdGeneration_table_adTemplates_action.events({
         }
     },
     'click .js-remove': function (e, tpl) {
+        UIBlock.block('Removing...');
         AdTemplates.remove({_id: this._id}, (err)=> {
             if (err) {
-                console.log(err);
+                sAlert.error('Template has not been removed');
             } else {
-                console.log('removed');
+                sAlert.success('Template has been removed');
             }
+            UIBlock.unblock();
         });
     }
 });

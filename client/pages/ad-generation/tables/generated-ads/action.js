@@ -6,14 +6,16 @@ Template.Adgenration_table_generatedAds_action.helpers({
 
 Template.Adgenration_table_generatedAds_action.events({
     'click .js-remove': function (e, tpl) {
-    GeneratedAds.remove({_id: this._id}, (err)=> {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('removed');
-        }
-    });
-}
+        UIBlock.block('Removing...');
+        GeneratedAds.remove({_id: this._id}, (err)=> {
+            if (err) {
+                sAlert.error('Generated ad has not been removed');
+            } else {
+                sAlert.success('Generated ad has been removed');
+            }
+            UIBlock.unblock();
+        });
+    }
 });
 
 Template.Adgenration_table_generatedAds_action.onCreated(function () {

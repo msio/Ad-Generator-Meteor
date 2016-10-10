@@ -1,0 +1,12 @@
+{
+  "private": {
+    "adTemplatesPath": "path to templates",
+    "dataPath": "path to excel files",
+    "generatedAdsPath": "path to generated ads"
+  },
+  "lagConfig": {
+    "base": {
+      "defaultDelay": 1000
+    }
+  }
+}
