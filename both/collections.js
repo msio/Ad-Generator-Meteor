@@ -145,7 +145,7 @@ AdTemplates = new Meteor.Files({
 
 
 AdData = new Meteor.Files({
-    debug: false,
+    debug: true,
     collectionName: 'AdData',
     storagePath: function () {
         return Meteor.isServer && Meteor.settings.private.dataPath
