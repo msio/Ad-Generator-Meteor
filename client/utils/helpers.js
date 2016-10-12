@@ -12,7 +12,3 @@ Template.registerHelper('isNotEmpty', (array)=> {
     }
     return array.length != 0;
 });
-
-Template.registerHelper('url', (file)=> {
-
-});

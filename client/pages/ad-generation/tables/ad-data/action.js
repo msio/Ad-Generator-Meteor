@@ -1,14 +1,6 @@
 Template.action.helpers({
     file: function () {
-        console.log(Template.instance().file.get().link());
-        console.log(Template.instance().file.get());
-        const file = Template.instance().file.get();
-        file.link = function () {
-            return 'http://localhost:3000/' + file._downloadRoute + '/' + file._collectionName + '/' + file._id + '/original/' + file._id + '.' + file.extension;
-
-        };
-        console.log(file);
-        return file;
+        return Template.instance().file.get();
     },
     selectState: function () {
         return Template.instance().selectState.get();
