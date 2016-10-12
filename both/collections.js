@@ -23,13 +23,13 @@ import
 }
 
 
-GeneratedAds = new Meteor.Files({
+GeneratedAds = new FilesCollection({
     debug: false,
     collectionName: 'GeneratedAds',
     allowClientCode: true
 });
 
-AdTemplates = new Meteor.Files({
+AdTemplates = new FilesCollection({
     debug: false,
     collectionName: 'AdTemplates',
     storagePath: function () {
@@ -144,8 +144,8 @@ AdTemplates = new Meteor.Files({
 });
 
 
-AdData = new Meteor.Files({
-    debug: true,
+AdData = new FilesCollection({
+    debug: false,
     collectionName: 'AdData',
     storagePath: function () {
         return Meteor.isServer && Meteor.settings.private.dataPath

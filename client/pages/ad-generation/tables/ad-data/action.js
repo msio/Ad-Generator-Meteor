@@ -1,6 +1,14 @@
 Template.action.helpers({
     file: function () {
-        return Template.instance().file.get();
+        console.log(Template.instance().file.get().link());
+        console.log(Template.instance().file.get());
+        const file = Template.instance().file.get();
+        file.link = function () {
+            return 'http://localhost:3000/' + file._downloadRoute + '/' + file._collectionName + '/' + file._id + '/original/' + file._id + '.' + file.extension;
+
+        };
+        console.log(file);
+        return file;
     },
     selectState: function () {
         return Template.instance().selectState.get();
@@ -12,14 +20,14 @@ Template.action.events({
         const row = $(e.target).closest('tr');
         //multiple selection
         /*if (row.hasClass('selected')) {
-            row.removeClass('selected');
-            tpl.selectState.set('Select');
-            SelectedAdData.remove({adDataId: this._id});
-        } else {
-            row.addClass('selected');
-            tpl.selectState.set('Unselect');
-            SelectedAdData.insert({adDataId: this._id});
-        }*/
+         row.removeClass('selected');
+         tpl.selectState.set('Select');
+         SelectedAdData.remove({adDataId: this._id});
+         } else {
+         row.addClass('selected');
+         tpl.selectState.set('Unselect');
+         SelectedAdData.insert({adDataId: this._id});
+         }*/
 
         const dataTable = $(e.target).closest('table').DataTable();
         //single selection
@@ -49,6 +57,7 @@ Template.action.events({
 Template.action.onCreated(function () {
     this.file = new ReactiveVar(AdData.findOne({_id: this.data._id}));
     this.selectState = new ReactiveVar('Select');
+    console.log(this);
 });
 Template.action.onRendered(function () {
 });
