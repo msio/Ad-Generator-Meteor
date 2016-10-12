@@ -49,7 +49,6 @@ Template.action.events({
 Template.action.onCreated(function () {
     this.file = new ReactiveVar(AdData.findOne({_id: this.data._id}));
     this.selectState = new ReactiveVar('Select');
-    console.log(this);
 });
 Template.action.onRendered(function () {
 });
