@@ -1,6 +1,6 @@
 import {validateSpreadsheet} from  './validations.js';
-import writeFile from 'write';
-
+import {Random} from 'meteor/random'
+import binConv from 'binstring';
 
 Meteor.methods({
     generateAd: function (doc) {
@@ -52,14 +52,11 @@ Meteor.methods({
                 htmlFile = htmlFile.replace(match, array[0][match.substring(1, match.length - 1)]);
             }
         });
-
         //TODO valid just for hardcoded placehoders {ad_name}-{campaign}-size.html
         const fileName = array[0]['ad_name'] + '-' + array[0]['campaign'] + '-' + adTemplate.resolution + '.html';
-        const savingPath = Meteor.settings.private.generatedAdsPath + fileName;
-        //write result into FS
-        writeFile.sync(savingPath, htmlFile);
-        //add file reference into db
-        GeneratedAds.addFile(savingPath, {
+        //convert string to buffer
+        const generatedAdBuffer = binConv(htmlFile);
+        GeneratedAds.write(generatedAdBuffer, {
             fileName: fileName,
             type: 'text/html',
             meta: {
@@ -69,7 +66,7 @@ Meteor.methods({
             }
         }, (err)=> {
             if (err) {
-                throw new Meteor.Error('Generated Add could not be added to FilesCollection \'GeneratedAds\'');
+                throw new Meteor.Error('Generated Add could not be written to and FS and inserted to FilesCollection \'GeneratedAds\'');
             }
         });
     }

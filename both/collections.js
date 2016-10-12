@@ -26,15 +26,14 @@ import
 GeneratedAds = new FilesCollection({
     debug: false,
     collectionName: 'GeneratedAds',
+    storagePath: Meteor.isServer && Meteor.settings.private.generatedAdsPath,
     allowClientCode: true
 });
 
 AdTemplates = new FilesCollection({
     debug: false,
     collectionName: 'AdTemplates',
-    storagePath: function () {
-        return Meteor.isServer && Meteor.settings.private.adTemplatesPath;
-    },
+    storagePath: Meteor.isServer && Meteor.settings.private.adTemplatesPath,
     allowClientCode: true,
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !/html/i.test(file.extension)) {
@@ -147,9 +146,7 @@ AdTemplates = new FilesCollection({
 AdData = new FilesCollection({
     debug: false,
     collectionName: 'AdData',
-    storagePath: function () {
-        return Meteor.isServer && Meteor.settings.private.dataPath
-    },
+    storagePath: Meteor.isServer && Meteor.settings.private.dataPath,
     allowClientCode: true,
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
