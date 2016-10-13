@@ -30,7 +30,7 @@ You have to configure paths where your templates, excel data and generated ads w
   }
 }
 ```
-`lagConfig` is configuration of meteor packages [alon:lag-methods](https://github.com/MasterAM/meteor-lag-methods) and [alon:lag-publications](https://github.com/MasterAM/meteor-lag-publications) where you can simulate response delay from server in development mode. This config ist just optional and you don't have to put it in settings at all.
+`lagConfig` is configuration of meteor packages [alon:lag-methods](https://github.com/MasterAM/meteor-lag-methods) and [alon:lag-publications](https://github.com/MasterAM/meteor-lag-publications) where you can simulate response delay from server in development mode. If you don't put this config in `settings-development.json`, default delay will be 1000ms
 
 
 
