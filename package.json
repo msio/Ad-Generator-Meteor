@@ -1,5 +1,5 @@
 {
-  "name": "meteor-files-demo-insert",
+  "name": "Ad-Generator",
   "private": true,
   "scripts": {
     "start": "meteor run --settings settings-development.json",
