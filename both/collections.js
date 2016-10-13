@@ -146,14 +146,14 @@ AdTemplates = new FilesCollection({
 AdData = new FilesCollection({
     debug: false,
     collectionName: 'AdData',
-    storagePath: Meteor.isServer && Meteor.settings.private.dataPath,
+    storagePath: Meteor.isServer && Meteor.settings.private.adDataPath,
     allowClientCode: true,
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !(/xlsx|xls|xlsm/i.test(file.extension))) {
             return 'Please upload xls,xlsx,xlsm,  with size equal or less than 10MB';
         }
         return true;
-    }/*,
+    },
     onAfterUpload: function (fileRef) {
         //check if the file name already exist
         const foundedData = AdData.find({name: fileRef.name});
@@ -170,7 +170,7 @@ AdData = new FilesCollection({
             fileRef.error = res;
         }
         return fileRef;
-    }*/
+    }
 });
 
 
