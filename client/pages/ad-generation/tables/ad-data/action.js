@@ -28,6 +28,7 @@ Template.action.events({
             SelectedAdData.remove({adDataId: this._id});
         } else {
             dataTable.$('tr.selected').removeClass('selected');
+            SelectedAdData.remove({});
             row.addClass('selected');
             SelectedAdData.insert({adDataId: this._id});
         }

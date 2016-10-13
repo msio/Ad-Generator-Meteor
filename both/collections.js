@@ -31,11 +31,11 @@ GeneratedAds = new FilesCollection({
 });
 
 AdTemplates = new FilesCollection({
-    debug: Meteor.isServer,
+    debug: false,
     collectionName: 'AdTemplates',
-    storagePath: Meteor.isServer && Meteor.settings.private.adTemplatesPath,
-    permissions: 0777,
-    parentDirPermissions: 0777,
+    storagePath: function () {
+        return Meteor.isServer && Meteor.settings.private.adTemplatesPath;
+    },
     allowClientCode: true,
     onBeforeUpload: function (file) {
         if (file.size > 1024 * 1024 * 10 || !/html/i.test(file.extension)) {

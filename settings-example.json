@@ -6,7 +6,7 @@
   },
   "lagConfig": {
     "base": {
-      "defaultDelay": 1000
+      "defaultDelay": 0
     }
   }
 }

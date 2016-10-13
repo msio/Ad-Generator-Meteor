@@ -9,4 +9,3 @@ export const columns = [{name: 'publisher', global: true}, {name: 'campaign', gl
     name: 'ad_name',
     global: true
 }, {name: 'other_info', global: true}, {name: 'title', global: true}];
- 

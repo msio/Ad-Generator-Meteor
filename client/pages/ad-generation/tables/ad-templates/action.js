@@ -19,6 +19,7 @@ Template.AdGeneration_table_adTemplates_action.events({
             SelectedAdTemplate.remove({adTemplateId: this._id});
         } else {
             dataTable.$('tr.selected').removeClass('selected');
+            SelectedAdTemplate.remove({});
             row.addClass('selected');
             SelectedAdTemplate.insert({adTemplateId: this._id});
         }
