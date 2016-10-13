@@ -1,0 +1,42 @@
+<template name="Error_template">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="warning-background modal-header">
+                    <h4 class="modal-title">Missing or Invalid Placeholders</h4>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Template file:</strong> {{fileName}}</p>
+                    {{#if equals error.type 'missing-invalid-placeholders'}}
+                        {{#if isNotEmpty error.placeholders.missing}}
+                            <h4>Missing Placeholders</h4>
+                        {{/if}}
+                        {{#each error.placeholders.missing}}
+                            <p><strong>{{name}}</strong>{{#if global}} - global{{/if}}</p>
+                        {{/each}}
+                        {{#if isNotEmpty error.placeholders.invalid}}
+                            <h4>Invalid Placeholders</h4>
+                        {{/if}}
+                        {{#each error.placeholders.invalid}}
+                            <p>{{this}}</p>
+                        {{/each}}
+                    {{/if}}
+                    {{#if equals error.type 'missing-notGlobalplaceholder'}}
+                        <h4>Missing not global Placeholders</h4>
+                        {{#each error.placeholders}}
+                            <p><span>{</span>{{name}}{{missingIndex}}<span>}</span></p>
+                        {{/each}}
+                    {{/if}}
+                    <h4>Defined Placeholders</h4>
+                    {{#each definedCols}}
+                        <p><strong>{{name}}</strong>{{#if global}} - global{{/if}}</p>
+                    {{/each}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

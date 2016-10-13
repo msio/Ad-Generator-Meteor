@@ -1,0 +1,40 @@
+<template name="Error_spreadsheet_modal">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="warning-background modal-header">
+                    <h4 class="modal-title">Invalid or Missing Excel Data</h4>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Excel file:</strong> {{fileName}}</p>
+                    {{#if equals error.type 'cols-error'}}
+                        <h4>Missing Cells and Columns</h4>
+                        {{#each error.cols.missingRows}}
+                            {{#if equals rowIndex -1}}
+                                | {{colName}}
+                            {{else}}
+                                <p><strong>Cell {{rowIndex}}</strong> - {{colName}}</p>
+                            {{/if}}
+                        {{/each}}
+                        <h4>Invalid Columns</h4>
+                        {{#each error.cols.invalidCols}}
+                            | {{colName}}
+                        {{/each}}
+                    {{else}}
+                        <p>{{error.msg}}</p>
+                    {{/if}}
+                    <h4>Defined Columns</h4>
+                    <p>
+                        {{#each definedCols}}
+                            | {{name}}
+                        {{/each}}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>

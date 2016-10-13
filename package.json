@@ -1,0 +1,17 @@
+{
+  "name": "meteor-files-demo-insert",
+  "private": true,
+  "scripts": {
+    "start": "meteor run --settings settings-development.json",
+    "sim-production": "meteor run --production --settings settings-development.json"
+  },
+  "dependencies": {
+    "binstring": "^0.2.1",
+    "bootstrap-fileinput-npm": "^4.2.8",
+    "bootstrap-sass": "^3.3.7",
+    "lodash": "^4.16.2",
+    "meteor-node-stubs": "^0.2.3",
+    "moment": "^2.15.1",
+    "xlsx": "^0.8.0"
+  }
+}
