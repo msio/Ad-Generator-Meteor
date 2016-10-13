@@ -1,7 +1,7 @@
 {
   "private": {
     "adTemplatesPath": "path to templates",
-    "dataPath": "path to excel files",
+    "adDataPath": "path to excel files",
     "generatedAdsPath": "path to generated ads"
   },
   "lagConfig": {
