@@ -2,6 +2,10 @@
 
 Ad Generator generates `.html` Ad page from `.html` Template and Excel Data e.g. `.xls`. Generated Ad can be used e.g, in `iframe`.
 
+## Screenshot
+
+<img src="https://github.com/msio777/Ad-Generator-Meteor/blob/master/screens/screen.png">
+
 ## Example
 
 This [example](http://www.screencast.com/t/MKjvyQhHZ) demostrates idea of the Ad Generator.
