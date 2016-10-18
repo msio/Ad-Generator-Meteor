@@ -1,14 +1,14 @@
-# Ad-Generator
+# Ad Generator Meteor
 
-Ad-Generator generates `.html` Ad page from `.html` Template and Excel Data e.g. `.xls`. Generated Ad can be used e.g, in `iframe`.
+Ad Generator generates `.html` Ad page from `.html` Template and Excel Data e.g. `.xls`. Generated Ad can be used e.g, in `iframe`.
 
 ## Example
 
-This [example](http://www.screencast.com/t/MKjvyQhHZ) demostrates idea of the Ad-Generator.
+This [example](http://www.screencast.com/t/MKjvyQhHZ) demostrates idea of the Ad Generator.
 
 ## Setup
 
-Ad-Generator is written in Meteor. First you need to have install [meteor](https://www.meteor.com/) for your OS.
+Ad Generator is written in Meteor. First you need to have install [meteor](https://www.meteor.com/) for your OS.
 
 * clone repo 
 ```shell 
