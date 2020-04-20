@@ -4,7 +4,7 @@ Ad Generator generates `.html` Ad page from `.html` Template and Excel Data e.g.
 
 ## Screenshot
 
-<img src="https://github.com/msio777/Ad-Generator-Meteor/blob/master/screens/screen.png">
+<img src="https://github.com/msio/Ad-Generator-Meteor/blob/master/screens/screen.png">
 
 ## Example
 
